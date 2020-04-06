@@ -22,9 +22,9 @@ class Users {
       ];
       const insert = `INSERT INTO users (name, password, ra_code, email)
         VALUES (?,?,?,?)`
-      db.run(insert, params, function(err){
-        if(err) {
-          res.status(400).json({"error": err.message});
+      db.run(insert, params, function (err) {
+        if (err) {
+          res.status(400).json({ "error": err.message });
           return;
         }
         data.id = this.lastID;
@@ -34,24 +34,38 @@ class Users {
         });
       });
     }
-    catch(e){
-      res.status(500).send(e.message);
+    catch (err) {
+      res.status(500).send(err.message);
     }
   }
 
   createToken(req, res) {
-    if (req.body.user === '123' && req.body.pwd === '123') {
-      const id = 1; //esse id viria do banco de dados
-      var token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: 300
-      });
-      return res.status(200).send({ auth: true, accessToken: token });
-    }
-    res.send('Falha ao autenticar!');
-  }
-
-  _find(req, res) {
-
+    const select = `SELECT * FROM users WHERE name=?`;
+    db.all(select, [req.body.name], async (err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      if (result != '') {
+        try {
+          const user = result[0]
+          if (await bcrypt.compare(req.body.password, user.password)) {
+            const id = user.id;
+            const token = jwt.sign({id}, process.env.ACCESS_TOKEN_SECRET, {
+              expiresIn: 150
+            });
+            res.status(200).send({ auth: true, accessToken: token });
+          }
+          else {
+            res.status(400).send({ auth: false, 'message': 'Não foi possível autenticar' });
+          }
+        }
+        catch (err){
+          res.status(500).send(err);
+        }
+      } else {
+        return res.status(400).send('Usuário não encontrado.');
+      }
+    });
   }
 
   authenticateToken(req, res, next) {
