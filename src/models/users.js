@@ -9,11 +9,7 @@ class Users {
   async register(req, res) {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      const data = {
-        "name": req.body.name,
-        "ra": req.body.ra_code,
-        "email": req.body.email
-      }
+      const data = {...req.body};
       const params = [
         req.body.name,
         hashedPassword,

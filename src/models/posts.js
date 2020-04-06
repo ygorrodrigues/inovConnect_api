@@ -1,19 +1,17 @@
 const db = require('../database/connection');
 
 class Posts{
-  add(post, resp) {
-    const data = {...post};
 
+  add(req, resp) {
+    const data = {...req.body};
     const params = [
-      post.title,
-      post.subtitle,
-      post.description
+      req.body.title,
+      req.body.subtitle,
+      req.body.description
     ];
-
-    const validTitle = post.title.length <= 100 && post.title.length > 0;
-    const validSubtitle = post.subtitle.length > 0;
+    const validTitle = req.body.title.length <= 100 && req.body.title.length > 0;
+    const validSubtitle = req.body.subtitle.length > 0;
     const validNumberOfParams = params.length == Object.keys(data).length;
-
     const validations = [
       {
         nome: 'title',
@@ -30,8 +28,7 @@ class Posts{
         valido: validNumberOfParams,
         message: 'O número de parâmetros está incorreto!'
       }
-    ]
-
+    ];
     const erros = validations.filter(campo => !campo.valido)
 
     if(erros.length){
@@ -50,7 +47,6 @@ class Posts{
         });
       })
     }
-    
   }
 
   list(resp) {
@@ -66,7 +62,6 @@ class Posts{
         })
       }
     });
-
   }
 
   searchId(id, resp) {
@@ -82,7 +77,7 @@ class Posts{
       } else {
         resp.status(404).json({'message': 'Não encontrado!'});
       }
-    })
+    });
   }
 
   change(id, dados, resp) {

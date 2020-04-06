@@ -8,26 +8,20 @@ module.exports = app => {
 
   app.get('/posts/:id', users.authenticateToken, (req, resp) => {
     const id = parseInt(req.params.id);
-
     Posts.searchId(id, resp);
   });
 
   app.post('/posts', (req, resp) => {
-    const post = req.body;
-
-    Posts.add(post, resp);
+    Posts.add(req, resp);
   });
 
   app.patch('/posts/:id', users.authenticateToken, (req, resp) => {
     const id = parseInt(req.params.id);
-    const dados = req.body;
-
-    Posts.change(id, dados, resp);
+    Posts.change(id, req.body, resp);
   });
 
   app.delete('/posts/:id', users.authenticateToken, (req, resp) => {
     const id = parseInt(req.params.id);
-
     Posts.delete(id, resp);
   });  
 
