@@ -2,7 +2,7 @@ const Posts = require('../models/posts');
 const users = require('../models/users');
 
 module.exports = app => {
-  app.get('/posts', (req, resp) => {
+  app.get('/posts', users.authenticateToken, (req, resp) => {
     Posts.list(resp);
   });
 
@@ -11,7 +11,7 @@ module.exports = app => {
     Posts.searchId(id, resp);
   });
 
-  app.post('/posts', (req, resp) => {
+  app.post('/posts', users.authenticateToken, (req, resp) => {
     Posts.add(req, resp);
   });
 
@@ -23,6 +23,6 @@ module.exports = app => {
   app.delete('/posts/:id', users.authenticateToken, (req, resp) => {
     const id = parseInt(req.params.id);
     Posts.delete(id, resp);
-  });  
+  });
 
 }

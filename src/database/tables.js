@@ -10,10 +10,14 @@ class Tables {
 
   create_posts() {
     this.db.run(`CREATE TABLE IF NOT EXISTS posts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title text, 
-      subtitle text, 
-      description text
+      post_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT, 
+      subtitle TEXT, 
+      description TEXT,
+      status INTEGER,
+      user_id INTEGER NOT NULL,
+      FOREIGN KEY (user_id)
+        REFERENCES users (user_id)
       )`,
       (err) => {
         console.log('A tabela post existe.')
@@ -22,11 +26,11 @@ class Tables {
 
   create_users() {
     this.db.run(`CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name text NOT NULL,
-      password text NOT NULL,
-      ra_code text NOT NULL,
-      email text NOT NULL
+      user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      password TEXT NOT NULL,
+      ra_code TEXT NOT NULL,
+      email TEXT NOT NULL
     )`,
     (err) => {
       console.log('A tabela users existe.')
@@ -36,14 +40,14 @@ class Tables {
   create_profiles() {
     this.db.run(`CREATE TABLE IF NOT EXISTS profiles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name text NOT NULL
+      name TEXT NOT NULL
     )`)
   }
 
   create_courses() {
     this.db.run(`CREATE TABLE IF NOT EXISTS courses (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name text NOT NULL
+      name TEXT NOT NULL
     )`)
   }
 

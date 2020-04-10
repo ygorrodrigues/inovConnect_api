@@ -3,12 +3,14 @@ const db = require('../database/connection');
 class Posts{
 
   add(req, resp) {
-    const data = {...req.body};
+    const data = {...req.body, 'user_id': req.userId};
     const params = [
       req.body.title,
       req.body.subtitle,
-      req.body.description
+      req.body.description,
+      req.userId
     ];
+    console.log(params);
     const validTitle = req.body.title.length <= 100 && req.body.title.length > 0;
     const validSubtitle = req.body.subtitle.length > 0;
     const validNumberOfParams = params.length == Object.keys(data).length;
@@ -34,7 +36,7 @@ class Posts{
     if(erros.length){
       resp.status(400).json(erros)
     } else {
-      const insert = 'INSERT INTO posts (title, subtitle, description) VALUES (?,?,?)';
+      const insert = 'INSERT INTO posts (title, subtitle, description, user_id) VALUES (?,?,?,?)';
       db.run(insert, params, function (error) {
         if (error) {
           resp.status(400).json({"error": error.message});

@@ -9,7 +9,10 @@ class Users {
   async register(req, res) {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      const data = {...req.body};
+      const data = {
+        'name': req.body.name,
+        'password': hashedPassword
+      };
       const params = [
         req.body.name,
         hashedPassword,
@@ -45,14 +48,14 @@ class Users {
         try {
           const user = result[0]
           if (await bcrypt.compare(req.body.password, user.password)) {
-            const id = user.id;
+            const id = user.user_id;
             const token = jwt.sign({id}, process.env.ACCESS_TOKEN_SECRET, {
-              expiresIn: 150
+              expiresIn: 1000
             });
-            res.status(200).send({ auth: true, accessToken: token });
+            res.status(200).json({ auth: true, accessToken: token});
           }
           else {
-            res.status(400).send({ auth: false, 'message': 'Não foi possível autenticar' });
+            res.status(400).json({ auth: false, 'message': 'Não foi possível autenticar' });
           }
         }
         catch (err){
@@ -67,13 +70,14 @@ class Users {
   authenticateToken(req, res, next) {
     var token = req.headers.authorization;
     if (!token) {
-      return res.status(401).send({ auth: false, message: 'Não autenticado' });
+      return res.status(401).json({ auth: false, message: 'Não autenticado' });
     }
 
     jwt.verify(token.split(' ')[1], process.env.ACCESS_TOKEN_SECRET, function (err, user) {
       if (err) {
-        return res.status(500).send({ auth: false, message: 'Erro ao autenticar.' });
+        return res.status(500).json({ auth: false, message: 'Erro ao autenticar.' });
       }
+      req.userId = user.id;
       next();
     })
   }
