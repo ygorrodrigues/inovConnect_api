@@ -67,7 +67,7 @@ class Posts{
   }
 
   searchId(id, resp) {
-    const select = `SELECT * FROM posts WHERE id=${id}`;
+    const select = `SELECT * FROM posts WHERE post_id=${id}`;
     db.all(select, [], (error, result) => {
       if(error) {
         resp.status(400).json({'error': error.message});
@@ -87,7 +87,7 @@ class Posts{
       title = ?,
       subtitle = ?,
       description = ?
-      WHERE id=?`;
+      WHERE post_id=?`;
 
     const data = {
       id: id,
@@ -113,7 +113,7 @@ class Posts{
   }
 
   delete(id, resp) {
-    const deleta = `DELETE FROM posts WHERE id=?`;
+    const deleta = `DELETE FROM posts WHERE post_id=?`;
 
     db.run(deleta, [id], (error) => {
       if(error) {

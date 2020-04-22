@@ -38,6 +38,26 @@ class Users {
     }
   }
 
+  list(req, resp) {
+    const select = `SELECT * FROM users WHERE user_id=?`;
+    db.all(select, [req.userId], (error, result) => {
+      if(error) {
+        resp.status(400).json({'error': error.message});
+        return;
+      } else {
+        const data = {
+          'name': result[0].name,
+          'ra_code': result[0].ra_code,
+          'email': result[0].email
+        }
+        resp.status(200).json({
+          'message': 'success',
+          'data': data
+        })
+      }
+    });
+  }
+
   createToken(req, res) {
     const select = `SELECT * FROM users WHERE name=?`;
     db.all(select, [req.body.name], async (err, result) => {
@@ -49,16 +69,16 @@ class Users {
           const user = result[0]
           if (await bcrypt.compare(req.body.password, user.password)) {
             const id = user.user_id;
-            const token = jwt.sign({id}, process.env.ACCESS_TOKEN_SECRET, {
+            const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
               expiresIn: 1000
             });
-            res.status(200).json({ auth: true, accessToken: token});
+            res.status(200).json({ auth: true, accessToken: token });
           }
           else {
             res.status(400).json({ auth: false, 'message': 'Não foi possível autenticar' });
           }
         }
-        catch (err){
+        catch (err) {
           res.status(500).send(err);
         }
       } else {
