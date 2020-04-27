@@ -43,7 +43,7 @@ module.exports = app => {
     Posts.change(id, req.body)
       .then((result) => {
         console.log(result)
-        if(result[0])
+        if (result[0])
           res.status(200).send(`${id} atualizado com sucesso`)
         else
           res.status(200).send('id não encontrado')
@@ -58,7 +58,7 @@ module.exports = app => {
     Posts.delete(id)
       .then((result) => {
         console.log(result)
-        if(result)
+        if (result)
           res.status(200).send(`${id} deletado com sucesso`)
         else
           res.status(200).send('id não encontrado')

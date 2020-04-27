@@ -4,7 +4,7 @@ module.exports = app => {
   app.post('/users/login', (req, res) => {
     Users.createToken(req)
       .then(response => {
-        if(response.auth == true) {
+        if (response.auth == true) {
           res.status(200).json(response)
         } else {
           res.status(403).json(response)
