@@ -1,4 +1,4 @@
-const Users = require('../models/users');
+const Users = require('../services/users');
 
 module.exports = app => {
   app.post('/users/login', (req, res) => {

@@ -1,28 +1,28 @@
-const Posts = require('../models/posts');
-const Users = require('../models/users');
+const Posts = require('../services/posts');
+const Users = require('../services/users');
 
 module.exports = app => {
-  app.get('/posts', Users.authenticateToken, (req, resp) => {
-    Posts.list(resp);
+  app.get('/posts', Users.authenticateToken, (req, res) => {
+    Posts.list(res);
   });
 
-  app.get('/posts/:id', Users.authenticateToken, (req, resp) => {
+  app.get('/posts/:id', Users.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
-    Posts.searchId(id, resp);
+    Posts.searchId(id, res);
   });
 
-  app.post('/posts', Users.authenticateToken, (req, resp) => {
-    Posts.add(req, resp);
+  app.post('/posts', Users.authenticateToken, (req, res) => {
+    Posts.add(req, res);
   });
 
-  app.patch('/posts/:id', Users.authenticateToken, (req, resp) => {
+  app.patch('/posts/:id', Users.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
-    Posts.change(id, req.body, resp);
+    Posts.change(id, req.body, res);
   });
 
-  app.delete('/posts/:id', Users.authenticateToken, (req, resp) => {
+  app.delete('/posts/:id', Users.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
-    Posts.delete(id, resp);
+    Posts.delete(id, res);
   });
 
 }
