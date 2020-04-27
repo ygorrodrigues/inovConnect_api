@@ -5,53 +5,49 @@ const db = require('../models');
 
 class Users {
 
-  async register(req, res) {
+  async register(req) {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-      db.users.create({
+      return db.users.create({
         name: req.body.name,
         password: hashedPassword,
         raCode: req.body.ra_code,
         email: req.body.email
       })
-      .then(newUser => {
-        return res.status(200).send(newUser);
-      })
-      .catch(error => {
-        return res.status(400).send(error);
-      })
+        .then(newUser => { return newUser })
+        .catch(() => { throw Error })
     }
-    catch (error) {
-      return res.status(500).send(error);
+    catch (e) {
+      throw Error
     }
   }
 
-  createToken(req, res) {
-    db.users.findAll({
+  createToken(req) {
+    return db.users.findAll({
       where: {
         name: req.body.name
       }
     }).then(async result => {
       if (result != '') {
-        try{
-          if(await bcrypt.compare(req.body.password, result[0].password)) {
+        try {
+          if (await bcrypt.compare(req.body.password, result[0].password)) {
             const id = result[0].id;
             const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-              expiresIn: 1000
-            });
-            res.status(200).json({ auth: true, accessToken: token });
+              expiresIn: 10000
+            })
+            return { auth: true, accessToken: token }
           } else {
-            res.status(400).json({ auth: false, 'message': 'Não foi possível autenticar' });
+            return { auth: false, 'message': 'Não foi possível autenticar' }
           }
         }
         catch (error) {
-          res.status(500).send(error);
+          throw Error
         }
       } else {
-        return res.status(404).send('Usuário não encontrado.');
+        return { auth: false, 'message': 'Usuário não encontrado.' }
       }
-    }).catch(error => res.status(500).send(error));
+    }).catch(() => { throw Error });
   }
 
   authenticateToken(req, res, next) {
@@ -69,19 +65,15 @@ class Users {
     })
   }
 
-  list(req, res) {
-    db.users.findAll({
+  list(req) {
+    return db.users.findAll({
       where: {
         id: req.userId
       },
       attributes: ['name', 'ra_code', 'email']
     })
-    .then(result => {
-      res.status(200).send(result);
-    })
-    .catch(error => {
-      res.status(400).send(error);
-    });
+      .then(result => { return result })
+      .catch(error => { throw Error });
   }
 
 }

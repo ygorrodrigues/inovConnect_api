@@ -1,8 +1,8 @@
 const db = require('../models');
 
-class Posts{
+class Posts {
 
-  add(req, res) {
+  add(req) {
     const validTitle = req.body.title.length <= 100 && req.body.title.length > 0;
     const validSubtitle = req.body.subtitle.length > 0;
     const validations = [
@@ -19,76 +19,54 @@ class Posts{
     ];
     const erros = validations.filter(campo => !campo.valido)
 
-    if(erros.length){
-      res.status(400).json(erros)
+    if (erros.length) {
+      console.log(erros);
+      return erros
     } else {
-      db.posts.create({
+      return db.posts.create({
         title: req.body.title,
         subtitle: req.body.subtitle,
         description: req.body.description,
         userId: req.userId
       })
-      .then(newPost => {
-        res.status(200).send(newPost);
-      })
-      .catch(error => {
-        res.status(400).send(error);
-      })
+        .then(newPost => { return newPost })
+        .catch(() => { throw Error })
     }
   }
 
-  list(res) {
-    db.posts.findAll()
-    .then(result => {
-      res.status(200).send(result);
-    })
-    .catch(error => {
-      res.status(404).send(error);
-    });
+  list() {
+    return db.posts.findAll()
+      .then(result => { return result })
+      .catch(() => { throw Error });
   }
 
-  searchId(id, res) {
-    db.posts.findAll({
+  searchId(id) {
+    return db.posts.findAll({
       where: {
         id: id
       }
     })
-    .then(result => {
-      res.status(200).send(result);
-    })
-    .catch(error => {
-      res.status(404).send(error);
-    });
+      .then(result => { return result })
+      .catch(() => { throw Error });
   }
 
-  change(id, data, res) {
-    db.posts.update(
-      {title: data.title},
-      {where: {id: id}}
+  change(id, data) {
+    return db.posts.update(
+      { title: data.title },
+      { where: { id: id } }
     )
-    .then(() => {
-      res.status(200).json({
-        'message': `${id} atualizado com sucesso.`,
-        'data': data
-      });
-    })
-    .catch(error => {
-      res.status(400).send(error);
-    });
+      .then((result) => { return result })
+      .catch(() => { throw Error });
   }
 
-  delete(id, res) {
-    db.posts.destroy({
+  delete(id) {
+    return db.posts.destroy({
       where: {
         id: id
       }
     })
-    .then(() => {
-      res.status(200).send(`${id} deletado com sucesso.`)
-    })
-    .catch(error => {
-      res.status(400).send(error);
-    });
+      .then((result) => { return result })
+      .catch(() => { throw Error });
   }
 }
 
