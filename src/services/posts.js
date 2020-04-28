@@ -27,10 +27,11 @@ class Posts {
         title: req.body.title,
         subtitle: req.body.subtitle,
         description: req.body.description,
-        userId: req.userId
+        userId: req.userId,
+        statusId: 1
       })
         .then(newPost => { return newPost })
-        .catch(() => { throw Error })
+        .catch((e) => { throw Error(e) })
     }
   }
 

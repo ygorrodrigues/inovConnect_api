@@ -11,7 +11,7 @@ module.exports = app => {
         }
       })
       .catch(error => {
-        res.status(500).send(error)
+        res.status(500).send(`${error}`)
       })
   });
 
@@ -21,7 +21,7 @@ module.exports = app => {
         res.status(200).send(response)
       })
       .catch(error => {
-        res.status(500).send(error)
+        res.status(500).send(`${error}`)
       })
   });
 
@@ -31,7 +31,7 @@ module.exports = app => {
         res.status(200).send(response)
       })
       .catch(error => {
-        res.status(500).send(error)
+        res.status(500).send(`${error}`)
       })
   });
 }

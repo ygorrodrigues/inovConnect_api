@@ -5,7 +5,7 @@
     "database": "inovconnect",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "operatorsAliases": false,
+    "logging": true,
     "port": 5558
   },
   "test": {

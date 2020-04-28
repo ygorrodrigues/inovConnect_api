@@ -13,13 +13,16 @@ class Users {
         name: req.body.name,
         password: hashedPassword,
         raCode: req.body.ra_code,
-        email: req.body.email
+        email: req.body.email,
+        perfilId: 1,
+        courseId: 1,
+        photoId: 1
       })
         .then(newUser => { return newUser })
-        .catch(() => { throw Error })
+        .catch((e) => { throw Error(e) })
     }
     catch (e) {
-      throw Error
+      throw Error(e)
     }
   }
 

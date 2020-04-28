@@ -1,22 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
   const posts = sequelize.define('posts', {
     title: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       field: 'title'
     },
     subtitle: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       field: 'subtitle'
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       field: 'description'
-    },
+    }
   }, 
   {
     freezeTableName: true,
     underscored: true,
-    timestamps: false
+    timestamps: true
   });
 
   posts.associate = models => {
@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
+    posts.belongsTo(models.status, {
+      foreignKey: {
+        allowNull: false
+      }
+    })
   }
 
   return posts;
