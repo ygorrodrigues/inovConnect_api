@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
     name: {
@@ -28,6 +26,16 @@ module.exports = (sequelize, DataTypes) => {
     users.hasMany(models.posts, {
       onDelete: 'cascade'
     });
+    users.belongsTo(models.courses, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+    users.belongsTo(models.photos, {
+      foreignKey: {
+        allowNull: false
+      }
+    })
   }
 
   return users;

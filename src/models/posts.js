@@ -2,11 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   const posts = sequelize.define('posts', {
     title: {
       type: DataTypes.STRING(50),
-      field: 'title'
-    },
-    subtitle: {
-      type: DataTypes.STRING(50),
-      field: 'subtitle'
+      field: 'title',
+      validate: {
+        notEmpty: true
+      }
     },
     description: {
       type: DataTypes.TEXT,
@@ -29,7 +28,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         allowNull: false
       }
-    })
+    });
+    posts.belongsToMany(models.categories, {
+      through: models.post_categories,
+      as: 'categories',
+      uniqueKey: 'posts_id'
+    });
   }
 
   return posts;

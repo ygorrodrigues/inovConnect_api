@@ -5,5 +5,8 @@
 3. Editar o src/config/config.json com os dados do seu banco postgres local
 4. Rodar a API com npm run dev
 
-Para a aplicação flutter funcionar corretamente é necessário (ainda) copiar o seu endereço IPv4 e colar no caminho (lib/http/webclient.dart)
+Para a aplicação flutter funcionar corretamente em testes é necessário copiar o seu endereço IPv4 e colar no caminho (lib/http/webclient.dart)
 na variável url.
+
+Adicionar o logging do config.json como false caso não queira os logs aparecendo no seu servidor.
+Alterar o force do server.js caso queira que os dados sejam mantidos no banco a cada atualização.

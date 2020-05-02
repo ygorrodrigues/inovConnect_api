@@ -3,42 +3,43 @@ const db = require('../models');
 class Posts {
 
   add(req) {
-    const validTitle = req.body.title.length <= 100 && req.body.title.length > 0;
-    const validSubtitle = req.body.subtitle.length > 0;
-    const validations = [
-      {
-        nome: 'title',
-        valido: validTitle,
-        message: 'O título precisa ter menos de 100 caracteres e não pode ser nulo.'
-      },
-      {
-        nome: 'subtitle',
-        valido: validSubtitle,
-        message: 'O subtítulo não pode estar vazio!'
-      }
-    ];
-    const erros = validations.filter(campo => !campo.valido)
-
-    if (erros.length) {
-      console.log(erros);
-      return erros
-    } else {
-      return db.posts.create({
-        title: req.body.title,
-        subtitle: req.body.subtitle,
-        description: req.body.description,
-        userId: req.userId,
-        statusId: 1
-      })
-        .then(newPost => { return newPost })
-        .catch((e) => { throw Error(e) })
-    }
+    return db.posts.create({
+      title: req.body.title,
+      description: req.body.description,
+      userId: req.userId,
+      statusId: 1
+    })
+      .then(newPost => { return newPost })
+      .catch((e) => { throw Error(e) })
   }
 
   list() {
-    return db.posts.findAll()
+    return db.posts.findAll({
+      attributes: ['title', 'description'],
+      include: [{
+        model: db.categories,
+        as: 'categories',
+        through: { attributes: [] }
+      }, {
+        model: db.status,
+        attributes: ['name']
+      }]
+    })
       .then(result => { return result })
-      .catch(() => { throw Error });
+      .catch((e) => { throw Error(e) })
+  }
+
+  listPendent() {
+    return db.posts.findAll({
+      include: [{
+        model: db.status,
+        where: { id: 1 },
+        attributes: ['name']
+      }],
+      attributes: ['title', 'description']
+    })
+      .then(result => { return result })
+      .catch((e) => { throw Error(e) });
   }
 
   searchId(id) {
@@ -48,7 +49,7 @@ class Posts {
       }
     })
       .then(result => { return result })
-      .catch(() => { throw Error });
+      .catch((e) => { throw Error(e) });
   }
 
   change(id, data) {
@@ -57,7 +58,7 @@ class Posts {
       { where: { id: id } }
     )
       .then((result) => { return result })
-      .catch(() => { throw Error });
+      .catch((e) => { throw Error(e) });
   }
 
   delete(id) {
@@ -67,7 +68,7 @@ class Posts {
       }
     })
       .then((result) => { return result })
-      .catch(() => { throw Error });
+      .catch((e) => { throw Error(e) });
   }
 }
 

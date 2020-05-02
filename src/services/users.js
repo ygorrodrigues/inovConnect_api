@@ -14,7 +14,6 @@ class Users {
         password: hashedPassword,
         raCode: req.body.ra_code,
         email: req.body.email,
-        perfilId: 1,
         courseId: 1,
         photoId: 1
       })
