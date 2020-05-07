@@ -34,4 +34,38 @@ module.exports = app => {
         res.status(500).send(`${error}`)
       })
   });
+
+  app.get('/confirmation/:token', (req, res) => {
+    Users.confirmEmail(req.params.token)
+      .then(response => {
+        res.status(200).send(response)
+      })
+      .catch(error => {
+        res.status(500).send(`${error}`)
+      })
+  });
+
+  app.post('/resetpass', (req, res) => {
+    Users.resetPassword(req)
+      .then(response => {
+        res.status(200).send(response)
+      })
+      .catch(error => {
+        res.status(500).send(`${error}`)
+      })
+  })
+
+  app.get('/resetpass/:token', (req, res) => {
+    res.render('reset_pwd')
+  })
+
+  app.post('/resetpass/:token', (req, res) => {
+    Users.changePassword(req)
+      .then(response => {
+        res.render('reset_pwd_finish', { message: response })
+      })
+      .catch(error => {
+        res.render('reset_pwd_finish', { message: error })
+      })
+  })
 }

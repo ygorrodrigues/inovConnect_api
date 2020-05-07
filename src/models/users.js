@@ -14,12 +14,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      field: 'email'
+      field: 'email',
+      validate: {
+        isEmail: true
+      }
     },
+    confirmed: {
+      type: DataTypes.BOOLEAN,
+      field: 'confirmed',
+      defaultValue: false
+    }
   }, {
     freezeTableName: true,
     underscored: true,
-    timestamps: false
+    timestamps: true
   });
 
   users.associate = models => {

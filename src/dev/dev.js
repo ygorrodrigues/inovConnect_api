@@ -22,7 +22,7 @@ fs.readFile('src/dev/portuga.jpg', (error, image) => {
       name: 'Ygor',
       password: 'kkkk',
       raCode: '1256',
-      email: 'arroba@',
+      email: 'ygor.telmo@hotmail.com',
       courseId: 1,
       photoId: 1
     })

@@ -8,6 +8,9 @@ module.exports = () => {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
 
+  app.set('views', './src/views');
+  app.set('view engine', 'ejs');
+
   consign()
     .include('src/controllers')
     .into(app);

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InovConnect</title>
+</head>
+<body>
+  <form name="passwords" onsubmit="return validateForm()" method="POST">
+    <label for="pwd">Nova senha:</label><br>
+    <input type="password" id="pwd" name="pwd"><br>
+    <label for="repeatpwd">Repetir senha:</label><br>
+    <input type="password" id="repeatpwd" name="repeatpwd"><br>
+    <input type="submit" value="Enviar">
+  </form>
+</body>
+
+<script>
+  function validateForm() {
+    let pwd = document.forms["passwords"]["pwd"].value
+    let repeatpwd = document.forms["passwords"]["repeatpwd"].value
+    if(pwd == "" || repeatpwd == "") {
+      alert("Os campos precisam estar preenchidos!")
+      return false
+    }
+    if(pwd !== repeatpwd) {
+      alert("Os campos precisam ser iguais!")
+      return false
+    }
+  }
+</script>
+</html>
