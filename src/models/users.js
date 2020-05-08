@@ -2,22 +2,45 @@ module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
     name: {
       type: DataTypes.STRING,
-      field: 'name'
+      field: 'name',
+      allowNull: false
     },
     password: {
       type: DataTypes.STRING,
-      field: 'password'
+      field: 'password',
+      allowNull: false
     },
     raCode: {
       type: DataTypes.INTEGER,
-      field: 'ra_code'
+      field: 'ra_code',
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: 'RA já está em uso'
+      }
     },
     email: {
       type: DataTypes.STRING,
       field: 'email',
       validate: {
-        isEmail: true
+        isEmail: true,
+        isUnisanta: function(value) {
+          const regex = /@.*unisanta.br/
+          let match = regex.exec(value)
+          if(!match) {
+            throw new Error('Somente email Unisanta autorizado!')
+          }
+        }
+      },
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Email já está em uso'
       }
+    },
+    photo: {
+      type: DataTypes.STRING,
+      field: 'photo'
     },
     confirmed: {
       type: DataTypes.BOOLEAN,
@@ -39,11 +62,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
-    users.belongsTo(models.photos, {
-      foreignKey: {
-        allowNull: false
-      }
-    })
   }
 
   return users;

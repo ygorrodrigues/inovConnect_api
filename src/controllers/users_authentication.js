@@ -1,8 +1,8 @@
-const Users = require('../services/users');
+const UsersAuth = require('../services/users_authentication');
 
 module.exports = app => {
   app.post('/users/login', (req, res) => {
-    Users.createToken(req)
+    UsersAuth.createToken(req)
       .then(response => {
         if (response.auth == true) {
           res.status(200).json(response)
@@ -16,17 +16,7 @@ module.exports = app => {
   });
 
   app.post('/users/register', (req, res) => {
-    Users.register(req)
-      .then(response => {
-        res.status(200).send(response)
-      })
-      .catch(error => {
-        res.status(500).send(`${error}`)
-      })
-  });
-
-  app.get('/user', Users.authenticateToken, (req, res) => {
-    Users.list(req)
+    UsersAuth.register(req)
       .then(response => {
         res.status(200).send(response)
       })
@@ -36,7 +26,7 @@ module.exports = app => {
   });
 
   app.get('/confirmation/:token', (req, res) => {
-    Users.confirmEmail(req.params.token)
+    UsersAuth.confirmEmail(req.params.token)
       .then(response => {
         res.status(200).send(response)
       })
@@ -46,7 +36,7 @@ module.exports = app => {
   });
 
   app.post('/resetpass', (req, res) => {
-    Users.resetPassword(req)
+    UsersAuth.resetPassword(req)
       .then(response => {
         res.status(200).send(response)
       })
@@ -60,7 +50,7 @@ module.exports = app => {
   })
 
   app.post('/resetpass/:token', (req, res) => {
-    Users.changePassword(req)
+    UsersAuth.changePassword(req)
       .then(response => {
         res.render('reset_pwd_finish', { message: response })
       })

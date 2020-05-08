@@ -1,8 +1,8 @@
 const Posts = require('../services/posts');
-const Users = require('../services/users');
+const UsersAuth = require('../services/users_authentication');
 
 module.exports = app => {
-  app.get('/posts', Users.authenticateToken, (req, res) => {
+  app.get('/posts', UsersAuth.authenticateToken, (req, res) => {
     Posts.list()
       .then(result => {
         res.status(200).send(result)
@@ -12,7 +12,7 @@ module.exports = app => {
       });
   });
 
-  app.get('/posts/:id', Users.authenticateToken, (req, res) => {
+  app.get('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
     Posts.searchId(id)
       .then(result => {
@@ -23,7 +23,7 @@ module.exports = app => {
       })
   });
 
-  app.post('/posts', Users.authenticateToken, (req, res) => {
+  app.post('/posts', UsersAuth.authenticateToken, (req, res) => {
     const response = Posts.add(req);
     if (typeof response.then === 'undefined') {
       res.status(400).send(response)
@@ -38,7 +38,7 @@ module.exports = app => {
       })
   });
 
-  app.patch('/posts/:id', Users.authenticateToken, (req, res) => {
+  app.patch('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
     Posts.change(id, req.body)
       .then((result) => {
@@ -53,7 +53,7 @@ module.exports = app => {
       })
   });
 
-  app.delete('/posts/:id', Users.authenticateToken, (req, res) => {
+  app.delete('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
     Posts.delete(id)
       .then((result) => {

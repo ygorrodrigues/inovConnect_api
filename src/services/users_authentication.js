@@ -1,35 +1,22 @@
 require('dotenv').config();
-const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const db = require('../models');
+const UserEmail = require('./users_email');
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASSWORD
-  }
-})
-
-class Users {
-
+class UsersAuth {
   async register(req) {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
       return db.users.create({
         name: req.body.name,
         password: hashedPassword,
-        raCode: req.body.ra_code,
+        raCode: req.body.raCode,
         email: req.body.email,
-        courseId: 1,
-        photoId: 1
+        courseId: req.body.courseId
       })
         .then(newUser => {
-          this.sendConfirmationEmail(newUser.id, req.body.email)
+          UserEmail.sendConfirmationEmail(newUser.id, req.body.email)
           return newUser
         })
         .catch((e) => { throw Error(e) })
@@ -37,27 +24,6 @@ class Users {
     catch (e) {
       throw Error(e)
     }
-  }
-
-  sendConfirmationEmail(id, email) {
-    jwt.sign({ id }, process.env.EMAIL_SECRET, {
-      expiresIn: '1d'
-    }, (err, emailToken) => {
-      if (err) {
-        db.users.destroy({
-          where: {
-            id: id
-          }
-        })
-        throw Error(err)
-      }
-      const url = `http://localhost:3000/confirmation/${emailToken}`
-      transporter.sendMail({
-        to: email,
-        subject: 'Confirmar usuário InovConnect',
-        html: `Por favor clique no link para confirmar sua conta: <a href="${url}">${url}</a>`
-      })
-    })
   }
 
   confirmEmail(token) {
@@ -80,28 +46,12 @@ class Users {
     })
       .then(result => {
         if (result != '') {
-          this.sendResetEmail(result[0].id, result[0].email)
+          UserEmail.sendResetEmail(result[0].id, result[0].email)
           return { user: true, 'message': 'Email com instruções enviado com sucesso!' }
         }
         return { user: false, 'message': 'Usuário não encontrado.' }
       })
       .catch((e) => { throw Error(e) })
-  }
-
-  sendResetEmail(id, email) {
-    jwt.sign({ id }, process.env.PASSWORD_RESET_SECRET, {
-      expiresIn: '120m'
-    }, (err, passwordResetToken) => {
-      if (err) {
-        throw Error(err)
-      }
-      const url = `http://localhost:3000/resetpass/${passwordResetToken}`
-      transporter.sendMail({
-        to: email,
-        subject: 'Mudar senha InovConnect',
-        html: `Por favor clique no link para inserir uma nova senha na sua conta: <a href="${url}">${url}</a>`
-      })
-    })
   }
 
   async changePassword(req) {
@@ -131,9 +81,9 @@ class Users {
     }).then(async result => {
       if (result != '') {
         try {
-          // if (!result[0].confirmed) {
-          //   throw Error('Confirme o email para continuar!')
-          // }
+          if (!result[0].confirmed) {
+            throw Error('Confirme o email para continuar!')
+          }
           if (await bcrypt.compare(req.body.password, result[0].password)) {
             const id = result[0].id;
             const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
@@ -172,18 +122,5 @@ class Users {
       next();
     })
   }
-
-  list(req) {
-    return db.users.findAll({
-      where: {
-        id: req.userId
-      },
-      attributes: ['name', 'raCode', 'email']
-    })
-      .then(result => { return result })
-      .catch(error => { throw Error });
-  }
-
 }
-
-module.exports = new Users;
+module.exports = new UsersAuth;
