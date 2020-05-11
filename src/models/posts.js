@@ -3,13 +3,15 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING(50),
       field: 'title',
+      allowNull: false,
       validate: {
         notEmpty: true
       }
     },
     description: {
       type: DataTypes.TEXT,
-      field: 'description'
+      field: 'description',
+      allowNull: false
     }
   }, 
   {
@@ -34,6 +36,11 @@ module.exports = (sequelize, DataTypes) => {
       as: 'categories',
       uniqueKey: 'posts_id'
     });
+    posts.belongsTo(models.types, {
+      foreignKey: {
+        allowNull: false
+      }
+    })
   }
 
   return posts;

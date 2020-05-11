@@ -7,13 +7,20 @@ class Posts {
       title: req.body.title,
       description: req.body.description,
       userId: req.userId,
+      typeId: req.body.type,
       statusId: 1
     })
-      .then(newPost => { return newPost })
+      .then(newPost => {
+        newPost.setCategories([
+          req.body.firstCategory,
+          req.body.secondCategory
+        ])
+        return newPost
+      })
       .catch((e) => { throw Error(e) })
   }
 
-  list() {
+  listAll() {
     return db.posts.findAll({
       attributes: ['title', 'description'],
       include: [{
@@ -23,13 +30,16 @@ class Posts {
       }, {
         model: db.status,
         attributes: ['name']
+      }, {
+        model: db.types,
+        attributes: ['name']
       }]
     })
       .then(result => { return result })
       .catch((e) => { throw Error(e) })
   }
 
-  listPendent() {
+  listActive() {
     return db.posts.findAll({
       include: [{
         model: db.status,

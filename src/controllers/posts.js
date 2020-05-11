@@ -3,7 +3,7 @@ const UsersAuth = require('../services/users_authentication');
 
 module.exports = app => {
   app.get('/posts', UsersAuth.authenticateToken, (req, res) => {
-    Posts.list()
+    Posts.listAll()
       .then(result => {
         res.status(200).send(result)
       })
