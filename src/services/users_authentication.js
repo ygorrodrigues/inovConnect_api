@@ -7,11 +7,15 @@ const UserEmail = require('./users_email');
 class UsersAuth {
   async register(req) {
     try {
+      if (req.body.password == '')
+        throw Error('Digite uma senha')
+      if (req.body.courseId == null)
+        throw Error('Selecione o seu curso')
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       return db.users.create({
         name: req.body.name,
         password: hashedPassword,
-        raCode: req.body.raCode,
+        raCode: parseInt(req.body.raCode, 10),
         email: req.body.email,
         courseId: req.body.courseId
       })
@@ -76,18 +80,18 @@ class UsersAuth {
   createToken(req) {
     return db.users.findAll({
       where: {
-        name: req.body.name
+        raCode: req.body.raCode
       }
     }).then(async result => {
       if (result != '') {
         try {
           if (!result[0].confirmed) {
-            throw Error('Confirme o email para continuar!')
+            throw new Error('Confirme o email para continuar!')
           }
           if (await bcrypt.compare(req.body.password, result[0].password)) {
             const id = result[0].id;
             const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-              expiresIn: '7d'
+              expiresIn: '10m'
             })
             return { auth: true, accessToken: token }
           } else {
@@ -120,6 +124,27 @@ class UsersAuth {
       }
       req.userId = user.id;
       next();
+    })
+  }
+
+  firstAuthentication(req) {
+    return new Promise((resolve, reject) => {
+      var token = req.headers.authorization
+      if (!token) {
+        reject({ auth: false, message: 'Não autenticado' })
+      }
+
+      var result = jwt.verify(token.split(' ')[1], process.env.ACCESS_TOKEN_SECRET, function (err, user) {
+        if (err && err.name === 'TokenExpiredError') {
+          return { auth: false, message: 'Token expirado', expiredIn: err.expiredAt }
+        }
+        if (err) {
+          return { auth: false, message: 'Erro ao autenticar.' }
+        }
+        return { auth: true, message: 'Ok' }
+      })
+
+      resolve(result)
     })
   }
 }

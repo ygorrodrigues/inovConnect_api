@@ -25,6 +25,19 @@ module.exports = app => {
       })
   });
 
+  // First authentication when entering the app
+  app.get('/users/auth', (req, res) => {
+    UsersAuth.firstAuthentication(req)
+      .then(response => {
+        if(!response.auth)
+          res.status(401).send(response.message)
+        res.status(200).send(response.message)
+      })
+      .catch(error => {
+        res.status(500).send(error);
+      })
+  })
+
   app.get('/confirmation/:token', (req, res) => {
     UsersAuth.confirmEmail(req.params.token)
       .then(response => {

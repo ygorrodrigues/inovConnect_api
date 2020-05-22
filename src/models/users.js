@@ -3,17 +3,32 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       field: 'name',
-      allowNull: false
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Digite o seu nome'
+        }
+      }
     },
     password: {
       type: DataTypes.STRING,
       field: 'password',
-      allowNull: false
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Digite uma senha'
+        }
+      }
     },
     raCode: {
       type: DataTypes.INTEGER,
       field: 'ra_code',
-      allowNull: false,
+      validate: {
+        isInt: {
+          args: true,
+          msg: 'Digite um RA válido'
+        },
+      },
       unique: {
         args: true,
         msg: 'RA já está em uso'
@@ -23,7 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       field: 'email',
       validate: {
-        isEmail: true,
+        isEmail: {
+          args: true,
+          msg: 'Insira um email válido'
+        },
         isUnisanta: function(value) {
           const regex = /@.*unisanta.br/
           let match = regex.exec(value)
@@ -32,7 +50,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
-      allowNull: false,
       unique: {
         args: true,
         msg: 'Email já está em uso'

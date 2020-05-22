@@ -36,3 +36,6 @@ db.courses.create({ name: 'Engenharia da computação ' })
         post.setCategories(categories)
       })
   })
+
+db.courses.create({ name: 'Fisioterapia' })
+db.courses.create({ name: 'Pedagogia' })
