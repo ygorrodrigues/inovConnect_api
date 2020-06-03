@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 module.exports = (sequelize, DataTypes) => {
   const posts = sequelize.define('posts', {
     title: {
@@ -12,12 +14,28 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       field: 'description',
       allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      field: 'created_at',
+      defaultValue: DataTypes.NOW,
+      get: function () {
+        return moment(this.getDataValue('created_at')).format('DD/MM/YYYY h:mm')
+      }
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      field: 'updated_at',
+      defaultValue: DataTypes.NOW,
+      get: function () {
+        return moment(this.getDataValue('created_at')).format('DD/MM/YYYY h:mm')
+      }
     }
   }, 
   {
     freezeTableName: true,
     underscored: true,
-    timestamps: true
+    timestamps: false
   });
 
   posts.associate = models => {

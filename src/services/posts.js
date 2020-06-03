@@ -22,7 +22,7 @@ class Posts {
 
   listAll() {
     return db.posts.findAll({
-      attributes: ['title', 'description'],
+      attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
       include: [{
         model: db.categories,
         as: 'categories',
@@ -32,6 +32,9 @@ class Posts {
         attributes: ['name']
       }, {
         model: db.types,
+        attributes: ['name']
+      }, {
+        model: db.users,
         attributes: ['name']
       }]
     })
