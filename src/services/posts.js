@@ -42,6 +42,38 @@ class Posts {
       .catch((e) => { throw Error(e) })
   }
 
+  listRaw() {
+    return db.query(
+      'SELECT * FROM posts' +
+      'LEFT JOIN status s on s.id = posts.status_id'
+    )
+      .then(result => { return result })
+      .catch((e) => { throw Error(e) })
+  }
+
+  listFilteredPosts(type) {
+    return db.posts.findAll({
+      attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
+      include: [{
+        model: db.categories,
+        as: 'categories',
+        through: { attributes: [] }
+      }, {
+        model: db.status,
+        attributes: ['name']
+      }, {
+        model: db.types,
+        attributes: ['name'],
+        where: { 'id': type }
+      }, {
+        model: db.users,
+        attributes: ['name']
+      }]
+    })
+      .then(result => { return result })
+      .catch((e) => { throw Error(e) })    
+  }
+
   listActive() {
     return db.posts.findAll({
       include: [{

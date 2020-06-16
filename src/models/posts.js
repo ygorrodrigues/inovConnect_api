@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
     posts.belongsToMany(models.categories, {
       through: models.post_categories,
       as: 'categories',
-      uniqueKey: 'posts_id'
+      foreignKey: 'posts_id'
     });
     posts.belongsTo(models.types, {
       foreignKey: {

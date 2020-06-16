@@ -2,7 +2,7 @@ const Posts = require('../services/posts');
 const UsersAuth = require('../services/users_authentication');
 
 module.exports = app => {
-  app.get('/posts', UsersAuth.authenticateToken, (req, res) => {
+  app.get('/posts', (req, res) => {
     Posts.listAll()
       .then(result => {
         res.status(200).send(result)
@@ -10,6 +10,10 @@ module.exports = app => {
       .catch((error) => {
         res.status(500).send(`${error}`)
       });
+  });
+
+  app.get('/posts/filter/:type&:category', (req, res) => {
+    Posts.listFilteredPosts()
   });
 
   app.get('/posts/:id', UsersAuth.authenticateToken, (req, res) => {

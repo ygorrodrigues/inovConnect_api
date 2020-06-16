@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const post_categories = sequelize.define('post_categories', {},
     {
-      freezeTableName: true,
+      freezeTableName: false,
       timestamps: false
     });
 
