@@ -1,5 +1,6 @@
 const db = require('../models');
-var fs = require('fs')
+var fs = require('fs');
+const categories = require('../services/categories');
 
 console.log('Executing dev start')
 
@@ -35,8 +36,8 @@ db.courses.create({ name: 'Engenharia da computação ' })
           statusId: 1,
           typeId: 1
         })
-        categories = [1, 2]
-        post.setCategories(categories)
+        categoriesOfPost = [1, 2]
+        post.setCategories(categoriesOfPost)
       })
   })
 
@@ -57,8 +58,8 @@ db.courses.create({ name: 'Fisioterapia' })
           statusId: 1,
           typeId: 3
         })
-        categories = [5, 1]
-        post.setCategories(categories)
+        categoriesOfPost = [5, 1]
+        post.setCategories(categoriesOfPost)
       })
   })
 
@@ -79,8 +80,8 @@ db.courses.create({ name: 'Pedagogia' })
           statusId: 1,
           typeId: 2
         })
-        categories = [6]
-        post.setCategories(categories)
+        categoriesOfPost = [6]
+        post.setCategories(categoriesOfPost)
       })
   })
 
@@ -101,8 +102,8 @@ db.courses.create({ name: 'Matemática' })
           statusId: 1,
           typeId: 1
         })
-        categories = [4, 2]
-        post.setCategories(categories)
+        categoriesOfPost = [4, 2]
+        post.setCategories(categoriesOfPost)
       })
   })
 
@@ -116,14 +117,18 @@ db.courses.create({ name: 'Biologia' })
       courseId: 5
     })
       .then(async r => {
-        const post = await db.posts.create({
-          title: 'Teste cinco',
-          description: 'SIM SIM SIM NÃO NOPE HAHA',
-          userId: 5,
-          statusId: 1,
-          typeId: 3
-        })
-        categories = [1]
-        post.setCategories(categories)
+        var i = 0;
+        while(i < 10) {
+          const post = await db.posts.create({
+            title: 'SPAM',
+            description: 'SIM SIM SIM',
+            userId: 5,
+            statusId: 1,
+            typeId: 3
+          })
+          categoriesOfPost = [1]
+          post.setCategories(categoriesOfPost)
+          i++;
+        }
       })
   })

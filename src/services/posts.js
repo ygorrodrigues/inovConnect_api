@@ -1,7 +1,7 @@
 const db = require('../models');
+const operatorNotNull = db.Sequelize.Op.ne
 
 class Posts {
-
   add(req) {
     return db.posts.create({
       title: req.body.title,
@@ -51,20 +51,25 @@ class Posts {
       .catch((e) => { throw Error(e) })
   }
 
-  listFilteredPosts(type) {
+  listFilteredPosts(type, category) {
     return db.posts.findAll({
       attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
       include: [{
         model: db.categories,
         as: 'categories',
-        through: { attributes: [] }
+        through: { attributes: [] },
+        where: { 'id': category != 0 ? category : {
+          [operatorNotNull]: null
+        }}
       }, {
         model: db.status,
         attributes: ['name']
       }, {
         model: db.types,
         attributes: ['name'],
-        where: { 'id': type }
+        where: { 'id': type != 0 ? type : {
+          [operatorNotNull]: null
+        }}
       }, {
         model: db.users,
         attributes: ['name']

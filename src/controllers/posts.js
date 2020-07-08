@@ -12,11 +12,19 @@ module.exports = app => {
       });
   });
 
-  app.get('/posts/filter/:type&:category', (req, res) => {
-    Posts.listFilteredPosts()
+  app.get('/posts/filter', (req, res) => {
+    const typeId = parseInt(req.query.type)
+    const categoryId = parseInt(req.query.category)
+    Posts.listFilteredPosts(typeId, categoryId)
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(error)
+      })
   });
 
-  app.get('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
+  app.get('/posts/id/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
     Posts.searchId(id)
       .then(result => {
