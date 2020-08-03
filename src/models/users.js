@@ -68,18 +68,23 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     underscored: true,
     timestamps: true
-  });
+  })
 
   users.associate = models => {
     users.hasMany(models.posts, {
       onDelete: 'cascade'
-    });
+    })
     users.belongsTo(models.courses, {
       foreignKey: {
         allowNull: false
       }
-    });
+    })
+    users.belongsToMany(models.chats, {
+      through: models.user_chats,
+      as: 'chats',
+      foreignKey: 'users_id'
+    })
   }
 
-  return users;
+  return users
 }
