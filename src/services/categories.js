@@ -8,6 +8,14 @@ class Categories {
       .then(result => { return result })
       .catch((e) => { throw Error(e) })
   }
+
+  add(newCategory) {
+    return db.categories.create({
+      name: newCategory
+    })
+      .then(result => { return result })
+      .catch((e) => { throw Error(e) })
+  }
 }
 
 module.exports = new Categories;

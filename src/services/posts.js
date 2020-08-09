@@ -11,10 +11,20 @@ class Posts {
       statusId: 1
     })
       .then(newPost => {
-        newPost.setCategories([
-          req.body.firstCategory,
-          req.body.secondCategory
-        ])
+        req.body.firstCategory > 0 ? 
+          newPost.setCategories([req.body.firstCategory]) : null
+        req.body.secondCategory > 0 ?
+          newPost.setCategories([req.body.secondCategory]) : null
+        return newPost
+      })
+      .catch((e) => { throw Error(e) })
+  }
+
+  addAnotherCategory(req, newCategoryId) {
+    return this.add(req)
+      .then((newPost) => {
+        newCategoryId > 0 ?
+          newPost.setCategories([newCategoryId]) : null
         return newPost
       })
       .catch((e) => { throw Error(e) })

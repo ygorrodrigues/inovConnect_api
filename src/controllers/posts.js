@@ -1,5 +1,6 @@
 const Posts = require('../services/posts');
 const UsersAuth = require('../services/users_authentication');
+const Categories = require('../services/categories');
 
 module.exports = app => {
   app.get('/posts', UsersAuth.authenticateToken, (req, res) => {
@@ -49,6 +50,20 @@ module.exports = app => {
         res.status(500).send(`${error}`)
       })
   });
+
+  app.post('/posts/new-category', UsersAuth.authenticateToken, (req, res) => {
+    Categories.add(req.body.anotherCategory)
+      .then((result) => {
+        console.log(result.id)
+        Posts.addAnotherCategory(req, result.id)
+          .then(result => {
+            res.status(200).send(result)
+          })
+          .catch((error) => {
+            res.status(500).send(`${error}`)
+          })
+      })
+  })
 
   app.patch('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);

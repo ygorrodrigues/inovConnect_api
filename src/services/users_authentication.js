@@ -45,7 +45,7 @@ class UsersAuth {
   resetPassword(req) {
     return db.users.findAll({
       where: {
-        raCode: req.body.raCode
+        email: req.body.email
       }
     })
       .then(result => {
