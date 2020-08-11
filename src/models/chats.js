@@ -10,14 +10,6 @@ module.exports = (sequelize, DataTypes) => {
         return moment(this.getDataValue('created_at')).format('DD/MM/YYYY h:mm')
       }
     },
-    updated_at: {
-      type: DataTypes.DATE,
-      field: 'updated_at',
-      defaultValue: DataTypes.NOW,
-      get: function () {
-        return moment(this.getDataValue('created_at')).format('DD/MM/YYYY h:mm')
-      }
-    },
     post_title: {
       type: DataTypes.STRING(50),
       field: 'post_title',

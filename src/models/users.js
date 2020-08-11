@@ -20,6 +20,17 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    description: {
+      type: DataTypes.STRING,
+      field: 'description',
+      defaultValue: 'Insira aqui sua descrição!',
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Digite uma senha'
+        }
+      }
+    },
     raCode: {
       type: DataTypes.INTEGER,
       field: 'ra_code',

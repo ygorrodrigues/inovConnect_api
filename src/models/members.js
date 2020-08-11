@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       field: 'status_message',
       allowNull: false,
-      defaultValue: 'Avaliação pendente, aguarde.'
+      defaultValue: 'Avaliação pendente'
     },
     updated_at: {
       type: DataTypes.DATE,

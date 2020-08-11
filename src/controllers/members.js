@@ -13,7 +13,7 @@ module.exports = app => {
   })
 
   app.get('/members-status', UsersAuth.authenticateToken, (req, res) => {
-    Members.listPendingMembers(req)
+    Members.listMembers(req)
       .then(result => {
         res.status(200).send(result)
       })

@@ -104,6 +104,21 @@ class Posts {
 
   searchId(id) {
     return db.posts.findAll({
+      attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
+      include: [{
+        model: db.categories,
+        as: 'categories',
+        through: { attributes: [] }
+      }, {
+        model: db.status,
+        attributes: ['name']
+      }, {
+        model: db.types,
+        attributes: ['name']
+      }, {
+        model: db.users,
+        attributes: ['name']
+      }],
       where: {
         id: id
       }

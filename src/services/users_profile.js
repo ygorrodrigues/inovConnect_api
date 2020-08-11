@@ -6,7 +6,11 @@ class UsersProfile {
       where: {
         id: req.userId
       },
-      attributes: ['name', 'raCode', 'email']
+      attributes: ['name', 'description'],
+      include: [{
+        model: db.courses,
+        attributes: ['name']
+      }]
     })
       .then(result => { return result })
       .catch(error => { throw Error });

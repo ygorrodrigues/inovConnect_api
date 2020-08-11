@@ -14,7 +14,7 @@ class Members {
       .catch((e) => { throw Error(e) })
   }
 
-  listPendingMembers(req) {
+  listMembers(req) {
     return db.members.findAll({
       attributes: ['id', 'updated_at', 'status_message'],
       include: [{
@@ -30,10 +30,13 @@ class Members {
     })
       .then(result => {
         const myPendentPosts = this._myPendentPosts(result, req.userId)
+          .map(row => ({...row.dataValues, participation: false}))
         const participations = this._participations(result, req.userId)
+          .map(row => ({...row.dataValues, participation: true}))
+
+        const data = myPendentPosts.concat(participations)
         return {
-          myPendentPosts: myPendentPosts,
-          participations: participations
+          data: data
         }
       })
       .catch((e) => { throw Error(e) })
@@ -54,7 +57,7 @@ class Members {
 
   memberStatusChange(req) {
     switch(req.body.memberStatusId) {
-      case "2":        
+      case 2:        
         return Chats._createChat(req.body.member)
           .then((result) => {
             const chatStatusMessage = 'Você está em uma avaliação por chat, verifique suas mensagens.'
@@ -67,7 +70,7 @@ class Members {
             return result
           })
           .catch((e) => { throw Error(e) })
-      case "3":
+      case 3:
         return db.users.findAll({
           attributes: ['id', 'name' ,'email'],
           where: { 'id': req.userId }
@@ -83,7 +86,7 @@ class Members {
             return { message: "success" }
           })
           .catch((e) => { throw Error(e) })
-      case "4":
+      case 4:
         const refusedStatusMessage = 'Você foi recusado... Boa sorte na próxima.'
         return db.members.update({
           memberStatusId: req.body.memberStatusId,

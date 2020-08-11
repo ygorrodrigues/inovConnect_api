@@ -143,8 +143,12 @@ class UsersAuth {
         }
         return { auth: true, message: 'Ok' }
       })
-
-      resolve(result)
+      if(result.auth) {
+        resolve(result)
+      }
+      else {
+        reject(result)
+      }      
     })
   }
 }
