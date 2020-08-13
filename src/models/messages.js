@@ -4,17 +4,20 @@ module.exports = (sequelize, DataTypes) => {
   const messages = sequelize.define('messages', {
     message: {
       type: DataTypes.STRING(300),
-      field: 'message'
+      field: 'message',
+      validate: {
+        notEmpty: true
+      },
     },
     created_at: {
       type: DataTypes.DATE,
       field: 'created_at',
       defaultValue: DataTypes.NOW,
       get: function () {
-        return moment(this.getDataValue('created_at')).format('DD/MM/YYYY h:mm')
+        return moment(this.getDataValue('created_at')).format()
       }
     },
-  }, 
+  },
   {
     freezeTableName: true,
     underscored: true,

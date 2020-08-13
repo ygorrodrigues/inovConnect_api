@@ -32,7 +32,7 @@ class Chats {
 
   listChats(req) {
     return db.chats.findAll({
-      attributes: ['id', 'post_title', 'updated_at'],
+      attributes: ['id', 'post_title'],
       include: [{
         model: db.users,
         as: 'users',
@@ -40,7 +40,7 @@ class Chats {
         attributes: ['id', 'name']
       }, {
         model: db.members,
-        attributes: ['memberStatusId'],
+        attributes: ['id', 'memberStatusId', 'user_id'],
         where: { 'memberStatusId': 2 }
       }]
     })
@@ -49,19 +49,20 @@ class Chats {
           return row.users.some(user => user.id === req.userId)
         })
         return userChats
+          .map(row => ({...row.dataValues, yourId: req.userId}))
       })
       .catch((e) => { throw Error(e) })
   }
 
   listMessages(chatId) {
     return db.messages.findAll({
-      attributes: ['id', 'message'],
+      attributes: ['id', 'message', 'created_at'],
       include: [{
         model: db.users,
         attributes: ['id', 'name']
       }, {
         model: db.chats,
-        attributes: ['id', 'post_title', 'users']
+        attributes: ['id', 'post_title']
       }],
       where: { 'chatId': chatId }
     })
