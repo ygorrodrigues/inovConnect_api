@@ -5,13 +5,36 @@ const Chats = require('./chats')
 class Members {
   add(req) {
     const postId = parseInt(req.body.post)
-    return db.members.create({
-      postId: postId,
-      userId: req.userId,
-      memberStatusId: 1
-    })
-      .then(newMember => newMember)
+    return this._verifyExistenceMember(req, postId)
+      .then(result => {
+        if(result.length === 0) {
+          return db.members.create({
+            postId: postId,
+            userId: req.userId,
+            memberStatusId: 1
+          })
+            .then(newMember => newMember)
+            .catch((e) => { throw Error(e) })
+        }
+        throw Error('Você já tentou participar ou está participando.')
+      })
       .catch((e) => { throw Error(e) })
+    }
+
+  _verifyExistenceMember(req, postId) {
+    return db.members.findAll({
+      attributes: ['id'],
+      include: [{
+        model: db.users,
+        attributes: ['id'],
+        where: { 'id': req.userId }
+      }],
+      include: [{
+        model: db.posts,
+        attributes: ['id'],
+        where: { 'id': postId }
+      }]
+    })
   }
 
   listMembers(req) {

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: 'Digite uma senha'
+          msg: 'Digite uma descrição'
         }
       }
     },

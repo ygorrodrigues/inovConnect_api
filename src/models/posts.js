@@ -7,13 +7,22 @@ module.exports = (sequelize, DataTypes) => {
       field: 'title',
       allowNull: false,
       validate: {
-        notEmpty: true
+        notEmpty: {
+          args: true,
+          msg: 'Digite um título'
+        }
       }
     },
     description: {
       type: DataTypes.TEXT,
       field: 'description',
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Digite uma descrição'
+        }
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -56,8 +65,14 @@ module.exports = (sequelize, DataTypes) => {
     });
     posts.belongsTo(models.types, {
       foreignKey: {
-        allowNull: false
-      }
+        allowNull: false,
+        validate: {
+          min: {
+            args: 1,
+            msg: 'Escolha um tipo de publicação'
+          }
+        }
+      },
     })
   }
 

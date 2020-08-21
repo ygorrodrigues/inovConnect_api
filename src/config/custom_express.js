@@ -7,6 +7,7 @@ module.exports = () => {
 
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
+  app.use(express.static('./src/views'));
 
   app.set('views', './src/views');
   app.set('view engine', 'ejs');

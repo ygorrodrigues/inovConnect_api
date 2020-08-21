@@ -131,7 +131,7 @@ Test.createGlobalPass()
         })
           .then(async r => {
             var i = 0;
-            while(i < 10) {
+            while(i < 2) {
               const post = await db.posts.create({
                 title: 'SPAM',
                 description: 'SIM SIM SIM',

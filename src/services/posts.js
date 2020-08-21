@@ -61,7 +61,7 @@ class Posts {
       .catch((e) => { throw Error(e) })
   }
 
-  listFilteredPosts(type, category) {
+  listFilteredPosts(type, category, userId) {
     return db.posts.findAll({
       attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
       include: [{
@@ -82,10 +82,15 @@ class Posts {
         }}
       }, {
         model: db.users,
-        attributes: ['name']
+        attributes: ['id', 'name']
       }]
     })
-      .then(result => { return result })
+      .then(result => { 
+        return {
+          'yourId': userId,
+          'data': result
+        }
+      })
       .catch((e) => { throw Error(e) })    
   }
 

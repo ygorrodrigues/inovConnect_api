@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const db = require('../models');
 const UserEmail = require('./users_email');
 
+const expirationTime = '1d'
+
 class UsersAuth {
   async register(req) {
     try {
@@ -91,11 +93,11 @@ class UsersAuth {
           if (await bcrypt.compare(req.body.password, result[0].password)) {
             const id = result[0].id;
             const token = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-              expiresIn: '10m'
+              expiresIn: expirationTime
             })
             return { auth: true, accessToken: token }
           } else {
-            return { auth: false, 'message': 'Não foi possível autenticar' }
+            return { auth: false, 'message': 'Não foi possível autenticar. RA ou senha incorretos.' }
           }
         }
         catch (error) {
@@ -117,7 +119,7 @@ class UsersAuth {
       if (err && err.name === 'TokenExpiredError') {
         return res
           .status(401)
-          .json({ auth: false, message: 'Token expirado', expiredIn: err.expiredAt })
+          .json({ statusCode: 401, auth: false, message: 'Token expirado', expiredIn: err.expiredAt })
       }
       if (err) {
         return res.status(500).json({ auth: false, message: 'Erro ao autenticar.' });
@@ -141,7 +143,7 @@ class UsersAuth {
         if (err) {
           return { auth: false, message: 'Erro ao autenticar.' }
         }
-        return { auth: true, message: 'Ok' }
+        return { auth: true, message: 'Sucesso ao autenticar' }
       })
       if(result.auth) {
         resolve(result)

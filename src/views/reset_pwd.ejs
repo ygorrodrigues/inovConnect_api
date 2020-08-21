@@ -1,32 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main.css">
   <title>InovConnect</title>
 </head>
+
 <body>
-  <form name="passwords" onsubmit="return validateForm()" method="POST">
-    <label for="pwd">Nova senha:</label><br>
-    <input type="password" id="pwd" name="pwd"><br>
-    <label for="repeatpwd">Repetir senha:</label><br>
-    <input type="password" id="repeatpwd" name="repeatpwd"><br>
-    <input type="submit" value="Enviar">
-  </form>
+  <div id=container>
+    <div id=logo>
+      <img src="/assets/logo.png" alt="Logo da empresa">
+    </div>
+    <form name="passwords" onsubmit="return validateForm()" method="POST">
+      <div class=fields>
+        <div class=label-field>
+          <label for="pwd">Nova senha</label><br>
+        </div>
+        <input type="password" id="pwd" name="pwd"><br>
+      </div>
+      <div class=fields>
+        <div class=label-field>
+          <label for="repeatpwd">Repetir senha</label><br>
+        </div>
+        <input type="password" id="repeatpwd" name="repeatpwd"><br>
+      </div>
+        <input type="submit" value="Enviar">
+    </form>
+  </div>
+
 </body>
 
 <script>
   function validateForm() {
     let pwd = document.forms["passwords"]["pwd"].value
     let repeatpwd = document.forms["passwords"]["repeatpwd"].value
-    if(pwd == "" || repeatpwd == "") {
+    if (pwd == "" || repeatpwd == "") {
       alert("Os campos precisam estar preenchidos!")
       return false
     }
-    if(pwd !== repeatpwd) {
+    if (pwd !== repeatpwd) {
       alert("Os campos precisam ser iguais!")
       return false
     }
   }
 </script>
+
 </html>
