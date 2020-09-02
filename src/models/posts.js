@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     });
-    posts.belongsTo(models.status, {
+    posts.belongsTo(models.post_status, {
       foreignKey: {
         allowNull: false
       }

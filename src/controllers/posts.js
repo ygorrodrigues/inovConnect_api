@@ -65,9 +65,19 @@ module.exports = app => {
       })
   })
 
+  app.get('/posts-status', (req, res) => {
+    Posts.listPostStatuses()
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(error)
+      })
+  })
+
   app.patch('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
-    Posts.change(id, req.body)
+    Posts.update(id, req)
       .then((result) => {
         console.log(result)
         if (result[0])
@@ -78,7 +88,7 @@ module.exports = app => {
       .catch((error) => {
         res.status(500).send(`${error}`)
       })
-  });
+  })
 
   app.delete('/posts/:id', UsersAuth.authenticateToken, (req, res) => {
     const id = parseInt(req.params.id);
@@ -93,6 +103,6 @@ module.exports = app => {
       .catch((error) => {
         res.status(500).send(`${error}`)
       })
-  });
+  })
 
 }

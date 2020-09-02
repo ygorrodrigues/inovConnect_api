@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const status = sequelize.define('status', {
+  const post_status = sequelize.define('post_status', {
     name: {
       type: DataTypes.STRING(25),
       field: 'name'
@@ -10,5 +10,5 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   });
 
-  return status;
+  return post_status;
 }

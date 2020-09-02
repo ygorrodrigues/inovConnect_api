@@ -5,9 +5,9 @@ const Test = require('./creation')
 
 console.log('Executing dev start')
 
-db.status.create({ name: 'Ativo' })
-db.status.create({ name: 'Bloqueado' })
-db.status.create({ name: 'Concluído' })
+db.post_status.create({ name: 'Ativo' })
+db.post_status.create({ name: 'Bloqueado' })
+db.post_status.create({ name: 'Concluído' })
 
 db.categories.create({ name: 'Software' })
 db.categories.create({ name: 'Hardware' })
@@ -42,7 +42,7 @@ Test.createGlobalPass()
             title: 'Teste',
             description: 'SIM SIM SIM',
             userId: 1,
-            statusId: 1,
+            postStatusId: 1,
             typeId: 1
           })
           categoriesOfPost = [1, 2]
@@ -65,7 +65,7 @@ Test.createGlobalPass()
               title: 'Teste dois',
               description: 'SIM SIM SIM NÃO',
               userId: 2,
-              statusId: 1,
+              postStatusId: 1,
               typeId: 3
             })
             categoriesOfPost = [5, 1]
@@ -88,7 +88,7 @@ Test.createGlobalPass()
               title: 'Teste três',
               description: 'SIM SIM SIM NÃO NOPE',
               userId: 3,
-              statusId: 1,
+              postStatusId: 1,
               typeId: 2
             })
             categoriesOfPost = [6]
@@ -111,7 +111,7 @@ Test.createGlobalPass()
               title: 'Teste quatro',
               description: 'SIM SIM SIM NÃO NOPE HAHA',
               userId: 4,
-              statusId: 1,
+              postStatusId: 1,
               typeId: 1
             })
             categoriesOfPost = [4, 2]
@@ -136,7 +136,7 @@ Test.createGlobalPass()
                 title: 'SPAM',
                 description: 'SIM SIM SIM',
                 userId: 5,
-                statusId: 1,
+                postStatusId: 1,
                 typeId: 3
               })
               categoriesOfPost = [1]

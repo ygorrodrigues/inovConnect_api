@@ -52,15 +52,6 @@ class Posts {
       .catch((e) => { throw Error(e) })
   }
 
-  listRaw() {
-    return db.query(
-      'SELECT * FROM posts' +
-      'LEFT JOIN status s on s.id = posts.status_id'
-    )
-      .then(result => { return result })
-      .catch((e) => { throw Error(e) })
-  }
-
   listFilteredPosts(type, category, userId) {
     return db.posts.findAll({
       attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
@@ -72,8 +63,9 @@ class Posts {
           [operatorNotNull]: null
         }}
       }, {
-        model: db.status,
-        attributes: ['name']
+        model: db.post_status,
+        attributes: ['name'],
+        where: { 'name': 'Ativo' }
       }, {
         model: db.types,
         attributes: ['name'],
@@ -113,16 +105,16 @@ class Posts {
       include: [{
         model: db.categories,
         as: 'categories',
-        through: { attributes: [] }
+        through: { attributes: [] },
       }, {
-        model: db.status,
+        model: db.post_status,
         attributes: ['name']
       }, {
         model: db.types,
-        attributes: ['name']
+        attributes: ['name'],
       }, {
         model: db.users,
-        attributes: ['name']
+        attributes: ['id', 'name']
       }],
       where: {
         id: id
@@ -132,9 +124,20 @@ class Posts {
       .catch((e) => { throw Error(e) });
   }
 
-  change(id, data) {
+  listPostStatuses() {
+    return db.post_status.findAll({
+      attributes: ['id', 'name']
+    })
+      .then(result => { return result })
+      .catch((e) => { throw Error(e) })
+  }
+
+  update(id, req) {
     return db.posts.update(
-      { title: data.title },
+      {
+        description: req.body.description,
+        postStatusId: req.body.statusId
+      },
       { where: { id: id } }
     )
       .then((result) => { return result })
