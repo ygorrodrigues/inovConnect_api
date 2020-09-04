@@ -37,17 +37,6 @@ Test.createGlobalPass()
         courseId: 1,
         confirmed: true
       })
-        .then(async r => {
-          const post = await db.posts.create({
-            title: 'Teste',
-            description: 'SIM SIM SIM',
-            userId: 1,
-            postStatusId: 1,
-            typeId: 1
-          })
-          categoriesOfPost = [1, 2]
-          post.setCategories(categoriesOfPost)
-        })
     })
 
     db.courses.create({ name: 'Fisioterapia' })
@@ -60,17 +49,6 @@ Test.createGlobalPass()
           courseId: 2,
           confirmed: true
         })
-          .then(async r => {
-            const post = await db.posts.create({
-              title: 'Teste dois',
-              description: 'SIM SIM SIM NÃO',
-              userId: 2,
-              postStatusId: 1,
-              typeId: 3
-            })
-            categoriesOfPost = [5, 1]
-            post.setCategories(categoriesOfPost)
-          })
       })
 
     db.courses.create({ name: 'Pedagogia' })
@@ -83,17 +61,6 @@ Test.createGlobalPass()
           courseId: 3,
           confirmed: true
         })
-          .then(async r => {
-            const post = await db.posts.create({
-              title: 'Teste três',
-              description: 'SIM SIM SIM NÃO NOPE',
-              userId: 3,
-              postStatusId: 1,
-              typeId: 2
-            })
-            categoriesOfPost = [6]
-            post.setCategories(categoriesOfPost)
-          })
       })
 
     db.courses.create({ name: 'Matemática' })
@@ -106,17 +73,6 @@ Test.createGlobalPass()
           courseId: 4,
           confirmed: true
         })
-          .then(async r => {
-            const post = await db.posts.create({
-              title: 'Teste quatro',
-              description: 'SIM SIM SIM NÃO NOPE HAHA',
-              userId: 4,
-              postStatusId: 1,
-              typeId: 1
-            })
-            categoriesOfPost = [4, 2]
-            post.setCategories(categoriesOfPost)
-          })
       })
 
     db.courses.create({ name: 'Biologia' })
@@ -129,20 +85,5 @@ Test.createGlobalPass()
           courseId: 5,
           confirmed: true
         })
-          .then(async r => {
-            var i = 0;
-            while(i < 2) {
-              const post = await db.posts.create({
-                title: 'SPAM',
-                description: 'SIM SIM SIM',
-                userId: 5,
-                postStatusId: 1,
-                typeId: 3
-              })
-              categoriesOfPost = [1]
-              post.setCategories(categoriesOfPost)
-              i++;
-            }
-          })
       })
   })
