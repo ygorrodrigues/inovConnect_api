@@ -1,7 +1,7 @@
 const customExpress = require('./src/config/custom_express');
 const app = customExpress();
 const db = require('./src/models');
-const force = false;
+const force = true;
 
 db.sequelize.sync({force: force}).then(() => {
   // Require for dev tests

@@ -8,7 +8,7 @@ class Posts {
       description: req.body.description,
       userId: req.userId,
       typeId: req.body.type,
-      statusId: 1
+      postStatusId: 1
     })
       .then(newPost => {
         req.body.firstCategory > 0 ? 
