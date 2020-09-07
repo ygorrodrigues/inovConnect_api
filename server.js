@@ -7,8 +7,9 @@ db.sequelize.sync({force: force}).then(() => {
   // Require for dev tests
   if (force)
     require('./src/dev/dev');
-  const server = app.listen(3000, () => {
-    console.log('Servidor online na porta 3000.');
+  const PORT = process.env.PORT || 3000;
+  const server = app.listen(PORT, () => {
+    console.log(`Servidor online na porta ${ PORT }.`);
   });
   const io = require('./src/socket')(server)
 })

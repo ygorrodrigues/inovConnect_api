@@ -23,11 +23,12 @@ class UserEmail {
         })
         throw Error(err)
       }
-      const url = `http://localhost:3000/confirmation/${emailToken}`
+      const url = process.env.PATH || 'http://localhost:3000'
+      const emailUrl = `${url}/confirmation/${emailToken}`
       transporter.sendMail({
         to: email,
         subject: 'Confirmar usuário InovConnect',
-        html: `Por favor clique no link para confirmar sua conta: <a href="${url}">${url}</a>`
+        html: `Por favor clique no link para confirmar sua conta: <a href="${emailUrl}">${emailUrl}</a>`
       })
     })
   }
@@ -39,11 +40,12 @@ class UserEmail {
       if (err) {
         throw Error(err)
       }
-      const url = `http://localhost:3000/resetpass/${passwordResetToken}`
+      const url = process.env.PATH || 'http://localhost:3000'
+      const emailUrl = `${url}/resetpass/${passwordResetToken}`
       transporter.sendMail({
         to: email,
         subject: 'Mudar senha InovConnect',
-        html: `Por favor clique no link para inserir uma nova senha na sua conta: <a href="${url}">${url}</a>`
+        html: `Por favor clique no link para inserir uma nova senha na sua conta: <a href="${emailUrl}">${emailUrl}</a>`
       })
     })
   }
