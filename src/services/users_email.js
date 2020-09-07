@@ -23,7 +23,7 @@ class UserEmail {
         })
         throw Error(err)
       }
-      const url = process.env.PATH || 'http://localhost:3000'
+      const url = process.env.URL_PATH || 'http://localhost:3000'
       const emailUrl = `${url}/confirmation/${emailToken}`
       transporter.sendMail({
         to: email,
@@ -40,7 +40,7 @@ class UserEmail {
       if (err) {
         throw Error(err)
       }
-      const url = process.env.PATH || 'http://localhost:3000'
+      const url = process.env.URL_PATH || 'http://localhost:3000'
       const emailUrl = `${url}/resetpass/${passwordResetToken}`
       transporter.sendMail({
         to: email,
