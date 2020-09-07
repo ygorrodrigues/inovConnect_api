@@ -17,10 +17,10 @@ module.exports = {
     "operatorsAliases": false
   },
   "production": {
-    "username": "ijmtyovzvdwtsc",
+    "username": "gzlehifkythkzk",
     "password": process.env.HEROKU_PASSWORD,
-    "database": "d33kruh4vi996u",
-    "host": "ec2-3-215-207-12.compute-1.amazonaws.com",
+    "database": "dcjmqsl44ibju1",
+    "host": "ec2-34-232-212-164.compute-1.amazonaws.com",
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
