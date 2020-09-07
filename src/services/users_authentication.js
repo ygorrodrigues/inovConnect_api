@@ -39,7 +39,7 @@ class UsersAuth {
       { where: { id: user.id } }
     )
       .then(result => {
-        return 'Usuário confirmado com sucesso!'
+        return {'message': 'Usuário confirmado com sucesso!'}
       })
       .catch((err) => { throw Error(err) })
   }
