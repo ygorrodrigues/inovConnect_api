@@ -1,7 +1,8 @@
-{
+require('dotenv').config();
+module.exports = {
   "development": {
     "username": "postgres",
-    "password": "tcczada",
+    "password": process.env.POSTGRES_PASSWORD,
     "database": "inovconnect",
     "host": "127.0.0.1",
     "dialect": "postgres",
@@ -16,11 +17,16 @@
     "operatorsAliases": false
   },
   "production": {
-    "username": "postgres",
-    "password": "tcczada",
-    "database": "inovconnect",
-    "host": "127.0.0.1",
+    "username": "ijmtyovzvdwtsc",
+    "password": process.env.HEROKU_PASSWORD,
+    "database": "d33kruh4vi996u",
+    "host": "ec2-3-215-207-12.compute-1.amazonaws.com",
     "dialect": "postgres",
-    "operatorsAliases": false
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }
