@@ -28,8 +28,7 @@ class Members {
         model: db.users,
         attributes: ['id'],
         where: { 'id': req.userId }
-      }],
-      include: [{
+      }, {
         model: db.posts,
         attributes: ['id'],
         where: { 'id': postId }
