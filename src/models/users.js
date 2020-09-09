@@ -54,10 +54,18 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Insira um email válido'
         },
         isUnisanta: function(value) {
-          const regex = /@.*unisanta.br/
-          let match = regex.exec(value)
-          if(!match) {
+          const regexEmail = /@.*unisanta.br/
+          let matchEmail = regexEmail.exec(value)
+          if(!matchEmail) {
             throw new Error('Somente email Unisanta autorizado!')
+          }
+
+          const regexStudent = /^[a-z]{2}[0-9]{6}/
+          const regexStaff = /@unisanta.br/
+          let matchStudent = regexStudent.exec(value)
+          let matchStaff = regexStaff.exec(value)
+          if(matchStudent && matchStaff) {
+            throw new Error('Email de aluno incorreto!')
           }
         }
       },
