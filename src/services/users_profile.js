@@ -19,7 +19,7 @@ class UsersProfile {
           through: { attributes: [] }
         }, {
           model: db.post_status,
-          attributes: ['name']
+          attributes: ['id', 'name']
         }, {
           model: db.types,
           attributes: ['name']
