@@ -32,13 +32,7 @@ module.exports = {
         "rejectUnauthorized": false
       },
       "useUTC": false,
-      "typeCast": function (field, next) {
-        if (field.type === 'TIMESTAMP') {
-          return field.string()
-        }
-          return next()
-        },
     },
-    "timezone": "-03:00",
+    timezone: 'America/Sao_Paulo',
   }
 }
