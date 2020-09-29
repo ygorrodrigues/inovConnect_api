@@ -33,7 +33,7 @@ module.exports = {
       },
       "useUTC": false,
       "typeCast": function (field, next) {
-        if (field.type === 'DATETIME') {
+        if (field.type === 'TIMESTAMP') {
           return field.string()
         }
           return next()
