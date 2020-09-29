@@ -33,6 +33,6 @@ module.exports = {
       },
       "useUTC": false,
     },
-    "timezone": "-3:00",
+    "timezone": "-03:00",
   }
 }
