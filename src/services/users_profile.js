@@ -27,7 +27,10 @@ class UsersProfile {
           model: db.users,
           attributes: ['id', 'name']
         }]
-      }]
+      }],
+      order: [
+        [db.posts, 'created_at', 'DESC']
+      ]
     })
     .then(userDataResult => {
       return db.members.findAll({

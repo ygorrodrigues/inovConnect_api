@@ -75,9 +75,12 @@ class Posts {
       }, {
         model: db.users,
         attributes: ['id', 'name']
-      }]
+      }],
+      order: [
+        ['updated_at', 'DESC']
+      ]
     })
-      .then(result => { 
+      .then(result => {
         return {
           'yourId': userId,
           'data': result
@@ -133,10 +136,12 @@ class Posts {
   }
 
   update(id, req) {
+    let currentTimestamp = new Date()
     return db.posts.update(
       {
         description: req.body.description,
-        postStatusId: req.body.statusId
+        postStatusId: req.body.statusId,
+        updatedAt: currentTimestamp
       },
       { where: { id: id } }
     )

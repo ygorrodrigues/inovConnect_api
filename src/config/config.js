@@ -6,7 +6,11 @@ module.exports = {
     "database": "inovconnect",
     "host": "127.0.0.1",
     "dialect": "postgres",
-    "port": 5558
+    "port": 5558,
+    "dialectOptions": {
+      "useUTC": false,
+    },
+    "timezone": "-3:00",
   },
   "test": {
     "username": "root",
@@ -26,7 +30,9 @@ module.exports = {
       "ssl": {
         "require": true,
         "rejectUnauthorized": false
-      }
-    }
+      },
+      "useUTC": false,
+    },
+    "timezone": "-3:00",
   }
 }
