@@ -32,6 +32,12 @@ module.exports = {
         "rejectUnauthorized": false
       },
       "useUTC": false,
+      "typeCast": function (field, next) {
+        if (field.type === 'DATETIME') {
+          return field.string()
+        }
+          return next()
+        },
     },
     "timezone": "-03:00",
   }
