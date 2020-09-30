@@ -78,6 +78,7 @@ class Members {
   }
 
   memberStatusChange(req) {
+    let currentTimestamp = new Date()
     switch(req.body.memberStatusId) {
       case 2:        
         return Chats._createChat(req.body.member)
@@ -85,7 +86,8 @@ class Members {
             const chatStatusMessage = 'Você está em uma avaliação por chat, verifique suas mensagens.'
             db.members.update({
               memberStatusId: req.body.memberStatusId,
-              status_message: chatStatusMessage
+              status_message: chatStatusMessage,
+              updatedAt: currentTimestamp
             },{
               where: { id: req.body.member }
             })
@@ -101,7 +103,8 @@ class Members {
             const aceptedStatusMessage = `Você foi aceito! Entre em contato com sua equipe: ${result[0].email}`
             db.members.update({
               memberStatusId: req.body.memberStatusId,
-              status_message: aceptedStatusMessage
+              status_message: aceptedStatusMessage,
+              updatedAt: currentTimestamp
             },{
               where: { id: req.body.member }
             })
@@ -112,7 +115,8 @@ class Members {
         const refusedStatusMessage = 'Você foi recusado... Boa sorte na próxima.'
         return db.members.update({
           memberStatusId: req.body.memberStatusId,
-          status_message: refusedStatusMessage
+          status_message: refusedStatusMessage,
+          updatedAt: currentTimestamp
         },{
           where: { id: req.body.member }
         })
