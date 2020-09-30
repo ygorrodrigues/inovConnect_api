@@ -1,5 +1,4 @@
 const db = require('../models')
-const pendingMember = 1
 const Chats = require('./chats')
 
 class Members {
@@ -52,13 +51,11 @@ class Members {
     })
       .then(result => {
         const myPendentPosts = this._myPendentPosts(result, req.userId)
-          .map(row => ({...row.dataValues, participation: false}))
         const participations = this._participations(result, req.userId)
-          .map(row => ({...row.dataValues, participation: true}))
-
         const data = myPendentPosts.concat(participations)
         return {
-          data: data
+          data: data,
+          yourId: req.userId
         }
       })
       .catch((e) => { throw Error(e) })

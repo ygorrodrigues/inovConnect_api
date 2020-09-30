@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       field: 'updated_at',
       defaultValue: DataTypes.NOW,
       get: function () {
-        return moment(this.getDataValue('updated_at')).tz('America/Sao_Paulo').format('DD/MM/YYYY HH:mm')
+        return moment(this.getDataValue('updated_at')).format('DD/MM/YYYY HH:mm')
       }
     }
   }, 
