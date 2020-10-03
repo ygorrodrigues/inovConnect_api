@@ -47,7 +47,10 @@ class Members {
       }, {
         model: db.member_status,
         attributes: ['id', 'name']
-      }]
+      }],
+      order: [
+        ['updated_at', 'DESC']
+      ]
     })
       .then(result => {
         const myPendentPosts = this._myPendentPosts(result, req.userId)

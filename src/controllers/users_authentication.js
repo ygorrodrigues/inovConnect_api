@@ -41,7 +41,7 @@ module.exports = app => {
   app.get('/confirmation/:token', (req, res) => {
     UsersAuth.confirmEmail(req.params.token)
       .then(response => {
-        res.status(200).send(response)
+        res.render('user_confirmation', { message: response })
       })
       .catch(error => {
         res.status(500).send(`${error}`)
