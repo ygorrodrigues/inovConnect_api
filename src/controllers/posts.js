@@ -14,9 +14,7 @@ module.exports = app => {
   });
 
   app.get('/posts/filter', UsersAuth.authenticateToken, (req, res) => {
-    const typeId = parseInt(req.query.type)
-    const categoryId = parseInt(req.query.category)
-    Posts.listFilteredPosts(typeId, categoryId, req.userId)
+    Posts.listFilteredPosts(req)
       .then(result => {
         res.status(200).send(result)
       })

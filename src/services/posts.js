@@ -52,7 +52,13 @@ class Posts {
       .catch((e) => { throw Error(e) })
   }
 
-  listFilteredPosts(type, category, userId) {
+  listFilteredPosts(req) {
+    const type = parseInt(req.query.type)
+    const category = parseInt(req.query.category)
+    const page = parseInt(req.query.page)
+    const userId = req.userId
+    const limit = 50
+
     return db.posts.findAll({
       attributes: ['id', 'title', 'description', 'created_at', 'updated_at'],
       include: [{
@@ -78,7 +84,10 @@ class Posts {
       }],
       order: [
         ['updated_at', 'DESC']
-      ]
+      ],
+      limit: limit,
+      offset: ((page-1)*limit),
+      subQuery: false
     })
       .then(result => {
         return {
