@@ -3,9 +3,14 @@ const app = customExpress();
 const db = require('./src/models');
 const http = require('http');
 
+let force = false;
+if(process.env.FORCE == 'TRUE') {
+  force = true;
+}
+
 db.sequelize.sync({force: force}).then(() => {
   // Require for dev tests
-  if (process.env.FORCE == 'TRUE')
+  if (force)
     require('./src/dev/dev');
   const PORT = process.env.PORT || 3000;
   const httpServer = http.createServer(app)
