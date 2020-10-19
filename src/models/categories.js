@@ -2,7 +2,12 @@ module.exports = (sequelize, DataTypes) => {
   const categories = sequelize.define('categories', {
     name: {
       type: DataTypes.STRING(25),
-      field: 'name'
+      field: 'name',
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Digite uma categoria não existente'
+      },
     }
   },
   {

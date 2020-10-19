@@ -1,6 +1,4 @@
 const db = require('../models');
-var fs = require('fs');
-const categories = require('../services/categories');
 const Test = require('./creation')
 
 console.log('Executing dev start')

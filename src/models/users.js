@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Digite um RA válido'
         },
       },
-      unique: {
-        args: true,
-        msg: 'RA já está em uso'
-      }
+      // unique: {
+      //   args: true,
+      //   msg: 'RA já está em uso'
+      // }
     },
     email: {
       type: DataTypes.STRING,
@@ -69,10 +69,10 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       },
-      unique: {
-        args: true,
-        msg: 'Email já está em uso'
-      }
+      // unique: {
+      //   args: true,
+      //   msg: 'Email já está em uso'
+      // }
     },
     photo: {
       type: DataTypes.STRING,

@@ -61,6 +61,9 @@ module.exports = app => {
             res.status(500).send(`${error}`)
           })
       })
+      .catch((error) => {
+        res.status(400).send(`${error}`)
+      })
   })
 
   app.get('/posts-status', (req, res) => {
