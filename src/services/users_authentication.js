@@ -143,7 +143,18 @@ class UsersAuth {
         if (err) {
           return { auth: false, message: 'Erro ao autenticar.' }
         }
-        return { auth: true, message: `Sucesso ao autenticar ${user}` }
+        return db.users.find({
+          where: {
+            id: user.id
+          }
+        }).then(user => {
+          if(!user) {
+            return { auth: false, message: `Erro ao autenticar` }
+          }
+          return { auth: true, message: `Sucesso ao autenticar` }
+        }).catch(e => {
+          return { auth: false, message: `Erro ao autenticar` }
+        })
       })
       if(result.auth) {
         resolve(result)
