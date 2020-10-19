@@ -136,32 +136,26 @@ class UsersAuth {
         reject({ auth: false, message: 'Não autenticado' })
       }
 
-      var result = jwt.verify(token.split(' ')[1], process.env.ACCESS_TOKEN_SECRET, function (err, user) {
+      jwt.verify(token.split(' ')[1], process.env.ACCESS_TOKEN_SECRET, function (err, user) {
         if (err && err.name === 'TokenExpiredError') {
-          return { auth: false, message: 'Token expirado', expiredIn: err.expiredAt }
+          reject({ auth: false, message: 'Token expirado', expiredIn: err.expiredAt })
         }
         if (err) {
-          return { auth: false, message: 'Erro ao autenticar.' }
+          reject({ auth: false, message: 'Erro ao autenticar.' })
         }
-        return db.users.find({
+        db.users.findAll({
           where: {
             id: user.id
           }
         }).then(user => {
-          if(!user) {
-            return { auth: false, message: `Erro ao autenticar` }
+          if(!user[0]) {
+            reject({ auth: false, message: `Erro ao autenticar` })
           }
-          return { auth: true, message: `Sucesso ao autenticar` }
+          resolve({ auth: true, message: `Sucesso ao autenticar` })
         }).catch(e => {
-          return { auth: false, message: `Erro ao autenticar` }
+          reject({ auth: false, message: `Erro ao autenticar` })
         })
       })
-      if(result.auth) {
-        resolve(result)
-      }
-      else {
-        reject(result)
-      }      
     })
   }
 }
