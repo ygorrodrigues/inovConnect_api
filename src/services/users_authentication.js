@@ -143,7 +143,7 @@ class UsersAuth {
         if (err) {
           return { auth: false, message: 'Erro ao autenticar.' }
         }
-        return { auth: true, message: 'Sucesso ao autenticar' }
+        return { auth: true, message: `Sucesso ao autenticar ${user}` }
       })
       if(result.auth) {
         resolve(result)
