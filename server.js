@@ -14,8 +14,8 @@ db.sequelize.sync({force: force}).then(() => {
     require('./src/dev/dev');
   const PORT = process.env.PORT || 3000;
   const httpServer = http.createServer(app)
-  const server = httpServer.listen(PORT, () => {
+  const io = require('./src/socket')(httpServer)
+  httpServer.listen(PORT, () => {
     console.log(`Servidor online na porta ${ PORT }.`);
   });
-  const io = require('./src/socket')(server)
 })
