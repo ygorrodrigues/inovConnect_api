@@ -12,6 +12,16 @@ module.exports = app => {
       })
   })
 
+  app.get('/members-of-post', UsersAuth.authenticateToken, (req, res) => {
+    Members.listMembersOfPost(req)
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(`${error}`)
+      })
+  })
+
   app.get('/members-status', UsersAuth.authenticateToken, (req, res) => {
     Members.listMembers(req)
       .then(result => {

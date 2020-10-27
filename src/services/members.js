@@ -126,6 +126,32 @@ class Members {
         console.log('Valor estranho enviado na requisição!')
     }
   }
+  
+  listMembersOfPost(req) {
+    const postId = parseInt(req.query.post)
+    return db.members.findAll({
+      attributes: ['id'],
+      include: [{
+        model: db.users,
+        attributes: ['id', 'name'],
+      }, {
+        model: db.posts,
+        attributes: ['id'],
+        where: { 'id': postId }
+      }, {
+        model: db.member_status,
+        attributes: ['id', 'name']
+      }]
+    })
+    .then(result => {
+      return {
+        data: result,
+        yourId: req.userId
+      }
+    })
+    .catch((e) => { throw Error(e) })
+  }
+
 }
 
 module.exports = new Members;
