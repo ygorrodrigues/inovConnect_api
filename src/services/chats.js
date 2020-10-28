@@ -64,7 +64,10 @@ class Chats {
         model: db.chats,
         attributes: ['id', 'post_title']
       }],
-      where: { 'chatId': chatId }
+      where: { 'chatId': chatId },
+      order: [
+        ['created_at', 'ASC']
+      ],
     })
       .then(result => {
         return result
