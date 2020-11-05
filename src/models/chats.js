@@ -14,6 +14,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
       field: 'post_title',
       allowNull: false,
+    },
+    owner_notified: {
+      type: DataTypes.BOOLEAN,
+      field: 'owner_notified',
+      defaultValue: true
+    },
+    member_notified: {
+      type: DataTypes.BOOLEAN,
+      field: 'member_notified',
+      defaultValue: false
     }
   },{
     freezeTableName: true,

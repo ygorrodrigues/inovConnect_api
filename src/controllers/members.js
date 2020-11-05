@@ -32,6 +32,26 @@ module.exports = app => {
       })
   })
 
+  app.get('/list-notifications', UsersAuth.authenticateToken, (req, res) => {
+    Members.listNotifications(req)
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(error)
+      })
+  })
+
+  app.patch('/notifications-seen-update', (req, res) => {
+    Members.notificationsSeenUpdate(req)
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(error)
+      })
+  })
+
   app.patch('/member-status-change', UsersAuth.authenticateToken, (req, res) => {
     Members.memberStatusChange(req)
       .then(result => {

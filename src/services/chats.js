@@ -1,5 +1,5 @@
 const db = require('../models')
-const operatorContains = db.Sequelize.Op.contains
+const Op = db.Sequelize.Op
 
 class Chats {
   _createChat(memberId) {
@@ -32,7 +32,7 @@ class Chats {
 
   listChats(req) {
     return db.chats.findAll({
-      attributes: ['id', 'post_title'],
+      attributes: ['id', 'post_title', 'owner_notified', 'member_notified'],
       include: [{
         model: db.users,
         as: 'users',
@@ -81,8 +81,79 @@ class Chats {
       userId: req.userId,
       message: req.body.message
     })
-      .then(newMessage => newMessage)
+      .then(newMessage => {
+        if(req.body.role == 'owner') {
+          db.chats.update({
+            member_notified: false
+          }, {
+            where: {
+              id: chatId
+            }
+          })
+        }
+        else {
+          db.chats.update({
+            owner_notified: false
+          }, {
+            where: {
+              id: chatId
+            }
+          })
+        }
+        return newMessage
+      })
       .catch((e) => { throw Error(e) })
+  }
+
+  listChatsNotifications(req) {
+    return db.chats.findAll({
+      attributes: ['id', 'owner_notified', 'member_notified'],
+      include: [{
+        model: db.users,
+        as: 'users',
+        through: { attributes: [] },
+        attributes: ['id', 'name']
+      }, {
+        model: db.members,
+        attributes: ['id', 'memberStatusId', 'user_id'],
+        where: { 'memberStatusId': 2 }
+      }],
+      where: {
+        [Op.or]: [
+          { 'owner_notified': false },
+          { 'member_notified': false }
+        ]
+      }
+    })
+      .then(result => {
+        const userChats = result.filter(row => {
+          return row.users.some(user => user.id === req.userId)
+        })
+        return userChats
+          .map(row => ({...row.dataValues, yourId: req.userId}))
+      })
+      .catch((e) => { throw Error(e) })
+  }
+
+  updateChatsNotifications(req) {
+    if(req.body.update == 'owner') {
+      return db.chats.update({
+        owner_notified: true
+      }, {
+        where: {
+          id: req.body.chatId
+        }
+      })
+    }
+    else {
+      return db.chats.update({
+        member_notified: true
+      }, {
+        where: {
+          id: req.body.chatId
+        }
+      })
+    }
   }
 }
 

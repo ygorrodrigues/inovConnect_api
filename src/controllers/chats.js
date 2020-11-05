@@ -12,6 +12,26 @@ module.exports = app => {
       })
   })
 
+  app.get('/chats-notifications', UsersAuth.authenticateToken, (req, res) => {
+    Chats.listChatsNotifications(req)
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(`${error}`)
+      })
+  })
+
+  app.patch('/chats-notifications-update', UsersAuth.authenticateToken, (req, res) => {
+    Chats.updateChatsNotifications(req)
+      .then(result => {
+        res.status(200).send(result)
+      })
+      .catch((error) => {
+        res.status(500).send(`${error}`)
+      })
+  })
+
   app.get('/messages/:id', UsersAuth.authenticateToken, (req, res) => {
     const chatId = parseInt(req.params.id)
     Chats.listMessages(chatId)

@@ -15,6 +15,16 @@ module.exports = (sequelize, DataTypes) => {
       get: function () {
         return moment(this.getDataValue('updated_at')).format('DD/MM/YYYY HH:mm')
       }
+    },
+    owner_notified: {
+      type: DataTypes.BOOLEAN,
+      field: 'owner_notified',
+      defaultValue: false
+    },
+    member_notified: {
+      type: DataTypes.BOOLEAN,
+      field: 'member_notified',
+      defaultValue: true
     }
   }, 
   {

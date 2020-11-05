@@ -37,44 +37,126 @@ class Members {
 
   listMembers(req) {
     return db.members.findAll({
-      attributes: ['id', 'updated_at', 'status_message'],
+      attributes: ['id', 'updated_at', 'status_message', 'owner_notified', 'member_notified'],
       include: [{
         model: db.users,
-        attributes: ['id', 'name']
+        attributes: ['id', 'name'],
+        where: { 'id': req.userId }
       }, {
         model: db.posts,
-        attributes: ['id', 'title', 'user_id']
+        attributes: ['id', 'title', 'user_id'],
       }, {
         model: db.member_status,
         attributes: ['id', 'name']
       }],
       order: [
         ['updated_at', 'DESC']
-      ]
+      ],
     })
-      .then(result => {
-        const myPendentPosts = this._myPendentPosts(result, req.userId)
-        const participations = this._participations(result, req.userId)
-        const data = myPendentPosts.concat(participations)
-        return {
-          data: data,
-          yourId: req.userId
-        }
+      .then(resultOne => {
+        return db.members.findAll({
+          attributes: ['id', 'updated_at', 'status_message', 'owner_notified', 'member_notified'],
+          include: [{
+            model: db.users,
+            attributes: ['id', 'name'],
+          }, {
+            model: db.posts,
+            attributes: ['id', 'title', 'user_id'],
+            where: { 'user_id': req.userId }
+          }, {
+            model: db.member_status,
+            attributes: ['id', 'name'],
+            where: { 'id': 1 }
+          }],
+          order: [
+            ['updated_at', 'DESC']
+          ],
+        })
+          .then(resultTwo => {
+            const data = resultTwo.concat(resultOne)
+            return {
+              data: data,
+              yourId: req.userId
+            }
+          })
+          .catch((e) => { throw Error(e) })
       })
       .catch((e) => { throw Error(e) })
   }
 
-  _myPendentPosts(result, userId) {
-    return result.filter(row => {
-      return row.post.dataValues.user_id === userId &&
-        row.member_status.id === 1
+  listNotifications(req) {
+    return db.members.findAll({
+      attributes: ['id', 'updated_at', 'status_message', 'owner_notified', 'member_notified'],
+      include: [{
+        model: db.users,
+        attributes: ['id', 'name'],
+        where: { 'id': req.userId }
+      }, {
+        model: db.posts,
+        attributes: ['id', 'title', 'user_id'],
+      }, {
+        model: db.member_status,
+        attributes: ['id', 'name']
+      }],
+      order: [
+        ['updated_at', 'DESC']
+      ],
+      where: {
+        'member_notified': false
+      }
     })
+      .then(resultOne => {
+        return db.members.findAll({
+          attributes: ['id', 'updated_at', 'status_message', 'owner_notified', 'member_notified'],
+          include: [{
+            model: db.users,
+            attributes: ['id', 'name'],
+          }, {
+            model: db.posts,
+            attributes: ['id', 'title', 'user_id'],
+            where: { 'user_id': req.userId }
+          }, {
+            model: db.member_status,
+            attributes: ['id', 'name'],
+            where: { 'id': 1 }
+          }],
+          order: [
+            ['updated_at', 'DESC']
+          ],
+          where: {
+            'owner_notified': false
+          }
+        })
+          .then(resultTwo => {
+            const data = resultTwo.concat(resultOne)
+            return {
+              data: data,
+              yourId: req.userId
+            }
+          })
+          .catch((e) => { throw Error(e) })
+      })
+      .catch((e) => { throw Error(e) })
   }
 
-  _participations(result, userId) {
-    return result.filter(row => {
-      return row.user.id === userId
+  notificationsSeenUpdate(req) {
+    return db.members.update({
+      owner_notified: true,
+    }, {
+      where: {
+        id: req.body.ownerNotifications
+      }
     })
+      .then(result => {
+        db.members.update({
+          member_notified: true,
+        }, {
+          where: {
+            id: req.body.memberNotifications
+          }
+        })
+      })
+      .catch((e) => { throw Error(e) })
   }
 
   memberStatusChange(req) {
@@ -87,7 +169,8 @@ class Members {
             db.members.update({
               memberStatusId: req.body.memberStatusId,
               status_message: chatStatusMessage,
-              updatedAt: currentTimestamp
+              updatedAt: currentTimestamp,
+              member_notified: false,
             },{
               where: { id: req.body.member }
             })
@@ -104,7 +187,8 @@ class Members {
             db.members.update({
               memberStatusId: req.body.memberStatusId,
               status_message: aceptedStatusMessage,
-              updatedAt: currentTimestamp
+              updatedAt: currentTimestamp,
+              member_notified: false,
             },{
               where: { id: req.body.member }
             })
@@ -116,7 +200,8 @@ class Members {
         return db.members.update({
           memberStatusId: req.body.memberStatusId,
           status_message: refusedStatusMessage,
-          updatedAt: currentTimestamp
+          updatedAt: currentTimestamp,
+          member_notified: false,
         },{
           where: { id: req.body.member }
         })
