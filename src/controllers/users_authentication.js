@@ -25,6 +25,37 @@ module.exports = app => {
       })
   });
 
+  app.patch('/users/change-email', (req, res) => {
+    if(UsersAuth.validateEmail(req)) {
+      UsersAuth.changeEmail(req)
+        .then(response => {
+          UsersAuth.resendConfirmationEmail(req)
+            .then(response => {
+              res.status(200).send(response)
+            })
+            .catch(error => {
+              res.status(500).send(`${error}`)
+            })
+        })
+        .catch(error => {
+          res.status(500).send(error)
+        })
+    }
+    else {
+      res.status(500).send('Email de aluno incorreto!')
+    }
+  })
+
+  app.post('/users/resend-confirmation', (req, res) => {
+    UsersAuth.resendConfirmationEmail(req)
+      .then(response => {
+        res.status(200).send(response)
+      })
+      .catch(error => {
+        res.status(500).send(`${error}`)
+      })
+  })
+
   // First authentication when entering the app
   app.get('/users/auth', (req, res) => {
     UsersAuth.firstAuthentication(req)

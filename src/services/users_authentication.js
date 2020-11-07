@@ -32,6 +32,46 @@ class UsersAuth {
     }
   }
 
+  validateEmail(req) {
+    const regexStudentCode = /^[a-z]{2}[0-9]{6}/
+    const regexStaff = /@unisanta.br/
+    const regexStudent = /@alunos.unisanta.br/
+    let matchStudentCode = regexStudentCode.exec(req.body.email)
+    let matchStaff = regexStaff.exec(req.body.email)
+    let matchStudent = regexStudent.exec(req.body.email)
+    if((matchStudentCode == null && matchStaff == null)
+      || matchStudentCode == null && matchStudent != null) {
+      return false
+    }
+    return true
+  }
+
+  changeEmail(req) {
+    const RA = req.body.usuario
+    return db.users.update({
+      email: req.body.email
+    }, {
+      where: {
+        raCode: RA
+      }
+    })
+    .then(result => result)
+    .catch((e) => { throw Error(e) })
+  }
+
+  resendConfirmationEmail(req) {
+    return db.users.findAll({
+      where: {
+        email: req.body.email
+      }
+    })
+    .then(user => {
+      UserEmail.sendConfirmationEmail(user[0].id, req.body.email)
+      return user[0]
+    })
+    .catch((e) => { throw e })
+  }
+
   confirmEmail(token) {
     const user = jwt.verify(token, process.env.EMAIL_SECRET);
     return db.users.update(
@@ -88,7 +128,7 @@ class UsersAuth {
       if (result != '') {
         try {
           if (!result[0].confirmed) {
-            throw new Error('Confirme o email para continuar!')
+            throw `Confirme o email para continuar - ${result[0].email}`
           }
           if (await bcrypt.compare(req.body.password, result[0].password)) {
             const id = result[0].id;
@@ -101,12 +141,12 @@ class UsersAuth {
           }
         }
         catch (error) {
-          throw Error(error)
+          throw error
         }
       } else {
         return { auth: false, 'message': 'Usuário não encontrado.' }
       }
-    }).catch((e) => { throw Error(e) });
+    }).catch((e) => { throw e });
   }
 
   authenticateToken(req, res, next) {
